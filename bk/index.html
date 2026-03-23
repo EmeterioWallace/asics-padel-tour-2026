@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASICS Pádel Open – Torneo oficial de pádel</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --azul:        #000066;
+    --azul-dark:   #00004d;
+    --azul-light:  #e8e8f0;
+    --rojo:        #D31226;
+    --negro:       #111111;
+    --gris-oscuro: #333333;
+    --gris-medio:  #767676;
+    --gris-claro:  #F4F4F4;
+    --borde:       #E0E0E0;
+    --blanco:      #FFFFFF;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Barlow', sans-serif; background: var(--blanco); color: var(--negro); overflow-x: hidden; }
+
+  /* ── NAV — fiel a asics.com ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    background: var(--blanco);
+    border-bottom: 1px solid #e5e5e5;
+    display: flex; align-items: center;
+    padding: 0 2rem; height: 60px;
+  }
+  .nav-center {
+    display: flex; align-items: center;
+    flex: 1; justify-content: center; gap: 0;
+  }
+  .nav-logo-wrap {
+    display: flex; align-items: center;
+    flex-shrink: 0; margin-right: 1.5rem;
+  }
+  .nav-logo-wrap svg { display: block; height: 28px; width: auto; }
+  .nav-links {
+    display: flex; align-items: center;
+    gap: 0; list-style: none;
+  }
+  .nav-links li a {
+    display: block;
+    font-size: 0.875rem; font-weight: 400;
+    color: var(--azul);
+    text-decoration: none;
+    padding: 0 1rem;
+    line-height: 60px;
+    white-space: nowrap;
+    transition: opacity .15s;
+    font-family: 'Barlow', sans-serif;
+  }
+  .nav-links li a:hover { opacity: .7; }
+  .nav-right {
+    display: flex; align-items: center;
+    flex-shrink: 0;
+  }
+  .nav-cta {
+    background: var(--azul); color: var(--blanco);
+    padding: .55rem 1.4rem;
+    font-size: 0.82rem; font-weight: 600;
+    letter-spacing: 0.3px;
+    text-decoration: none; transition: background .15s;
+    white-space: nowrap;
+    font-family: 'Barlow', sans-serif;
+  }
+  .nav-cta:hover { background: var(--azul-dark); }
+
+  /* ── HERO ── */
+  #inicio {
+    min-height: 100vh;
+    display: grid; grid-template-columns: 1fr 1fr;
+    padding-top: 64px;
+  }
+  .hero-content {
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 5rem 4rem 5rem 4rem;
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: .6rem;
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--azul);
+    margin-bottom: 1.2rem;
+  }
+  .hero-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: clamp(3.5rem, 6vw, 6rem);
+    line-height: .95; text-transform: uppercase;
+    color: var(--negro); margin-bottom: 1.5rem;
+  }
+  .hero-title em { color: var(--azul); font-style: normal; }
+  .hero-desc {
+    font-size: 1.05rem; font-weight: 300; line-height: 1.75;
+    color: var(--gris-oscuro); max-width: 480px; margin-bottom: 2.5rem;
+  }
+  .hero-actions { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--azul); color: var(--blanco);
+    padding: 1rem 2.5rem; font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.05rem; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; text-decoration: none;
+    transition: background .15s; display: inline-block;
+  }
+  .btn-primary:hover { background: var(--azul-dark); }
+  .btn-ghost {
+    color: var(--azul); font-size: 0.85rem; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    text-decoration: none; border-bottom: 2px solid var(--azul);
+    padding-bottom: 2px; transition: color .15s, border-color .15s;
+  }
+  .btn-ghost:hover { color: var(--azul-dark); border-color: var(--azul-dark); }
+  .hero-meta {
+    display: flex; gap: 2rem; margin-top: 3rem;
+    padding-top: 2rem; border-top: 1px solid var(--borde);
+    flex-wrap: wrap;
+  }
+  .hero-meta-item { }
+  .hero-meta-label { font-size: 0.68rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gris-medio); margin-bottom: .3rem; }
+  .hero-meta-value { font-family: 'Barlow Condensed', sans-serif; font-size: 1.1rem; font-weight: 700; letter-spacing: .5px; color: var(--negro); }
+
+  .hero-visual {
+    background: #f0f2f5;
+    position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 600px;
+  }
+  .hero-visual-inner {
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 1.5rem; z-index: 1;
+  }
+  .hero-shoe-placeholder {
+    width: 320px; height: 200px;
+    background: rgba(0,61,165,0.08);
+    border: 2px dashed rgba(0,61,165,0.2);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: .5rem; color: var(--azul);
+    font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase;
+    font-weight: 600;
+  }
+  .hero-shoe-placeholder span { font-size: 3.5rem; opacity: .4; }
+  .hero-badge-float {
+    position: absolute; top: 2rem; right: 2rem;
+    background: var(--rojo); color: var(--blanco);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem; font-weight: 800; letter-spacing: 2px;
+    text-transform: uppercase; padding: .5rem 1rem;
+  }
+  .hero-bg-lines {
+    position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(
+      0deg, transparent, transparent 59px,
+      rgba(0,61,165,0.06) 59px, rgba(0,61,165,0.06) 60px
+    );
+  }
+
+  /* ── CONTADOR ── */
+  .countdown-bar {
+    background: var(--azul); color: var(--blanco);
+    padding: 2rem 4rem;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 2rem;
+  }
+  .countdown-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.2rem; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .countdown-units { display: flex; gap: 2rem; }
+  .countdown-unit { text-align: center; }
+  .countdown-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 3rem; font-weight: 900; line-height: 1;
+    display: block;
+  }
+  .countdown-unit-label {
+    font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase;
+    opacity: .7; margin-top: .2rem; display: block;
+  }
+  .countdown-sep { color: rgba(255,255,255,.4); font-size: 2rem; align-self: flex-start; margin-top: .4rem; }
+
+  /* ── SECTIONS ── */
+  section { padding: 6rem 4rem; }
+  .container { max-width: 1120px; margin: 0 auto; }
+  .section-eyebrow {
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--azul); margin-bottom: .8rem;
+    display: flex; align-items: center; gap: .5rem;
+  }
+  .section-eyebrow::before { content: ''; display: block; width: 20px; height: 2px; background: var(--azul); }
+  .section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: clamp(2.2rem, 4vw, 3.5rem);
+    text-transform: uppercase; line-height: .95; color: var(--negro);
+    margin-bottom: 1.5rem;
+  }
+  .divider { border: none; border-top: 1px solid var(--borde); }
+
+  /* ── SOBRE EL EVENTO ── */
+  #sobre { background: var(--blanco); }
+  .sobre-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
+  .sobre-text p {
+    font-size: 1rem; line-height: 1.8; color: var(--gris-oscuro);
+    font-weight: 300; margin-bottom: 1rem;
+  }
+  .sobre-text p strong { color: var(--negro); font-weight: 600; }
+  .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: 2.5rem; }
+  .stat-item {
+    padding: 1.5rem; border: 1px solid var(--borde);
+    border-right: none; text-align: center;
+  }
+  .stat-item:last-child { border-right: 1px solid var(--borde); }
+  .stat-number {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 3rem; font-weight: 900; color: var(--azul); line-height: 1;
+  }
+  .stat-label { font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; color: var(--gris-medio); margin-top: .4rem; }
+
+  .sobre-visual {
+    background: var(--gris-claro);
+    min-height: 460px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 6rem; color: var(--borde);
+    position: relative; overflow: hidden;
+  }
+  .sobre-visual-label {
+    position: absolute; bottom: 1.5rem; left: 1.5rem;
+    background: var(--azul); color: var(--blanco);
+    font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase;
+    font-weight: 700; padding: .4rem .8rem;
+  }
+
+  /* ── CATEGORÍAS ── */
+  #categorias { background: var(--gris-claro); }
+  .cats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1px; background: var(--borde); margin-top: 3rem; }
+  .cat-card {
+    background: var(--blanco); padding: 2.5rem 2rem;
+    transition: background .2s;
+    cursor: default;
+  }
+  .cat-card:hover { background: var(--azul); }
+  .cat-card:hover .cat-name,
+  .cat-card:hover .cat-desc,
+  .cat-card:hover .cat-num { color: var(--blanco); }
+  .cat-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 3.5rem; font-weight: 900; color: var(--azul-light);
+    line-height: 1; margin-bottom: .5rem; transition: color .2s;
+  }
+  .cat-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.4rem; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 1px; color: var(--negro); margin-bottom: .5rem;
+    transition: color .2s;
+  }
+  .cat-desc { font-size: 0.85rem; color: var(--gris-medio); line-height: 1.5; transition: color .2s; }
+
+  /* ── FORMATO ── */
+  #formato { background: var(--blanco); }
+  .formato-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; margin-top: 3rem; }
+  .formato-block h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.4rem; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 1px; color: var(--negro);
+    border-left: 3px solid var(--azul); padding-left: 1rem;
+    margin-bottom: 1.2rem;
+  }
+  .formato-list { list-style: none; }
+  .formato-list li {
+    padding: .75rem 0; border-bottom: 1px solid var(--borde);
+    font-size: 0.95rem; color: var(--gris-oscuro);
+    display: flex; align-items: baseline; gap: .75rem; font-weight: 300;
+  }
+  .formato-list li::before {
+    content: '→'; color: var(--azul); font-weight: 700; flex-shrink: 0;
+  }
+
+  /* ── INSCRIPCIONES ── */
+  #inscripciones { background: var(--gris-claro); }
+  .inscr-layout { display: grid; grid-template-columns: 1fr 1.3fr; gap: 4rem; margin-top: 3rem; align-items: start; }
+  .precio-bloque { }
+  .precio-tag {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 5.5rem; font-weight: 900; color: var(--azul); line-height: 1;
+  }
+  .precio-sub { font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; color: var(--gris-medio); margin-top: .3rem; margin-bottom: 2rem; }
+  .deadline-pill {
+    display: inline-flex; align-items: center; gap: .6rem;
+    background: var(--rojo); color: var(--blanco);
+    font-size: 0.78rem; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; padding: .5rem 1rem; margin-bottom: 2rem;
+  }
+  .incluye-title { font-size: 0.7rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gris-medio); margin-bottom: 1rem; }
+  .incluye-list { list-style: none; margin-bottom: 2rem; }
+  .incluye-list li {
+    padding: .65rem 0; border-bottom: 1px solid var(--borde);
+    font-size: 0.92rem; color: var(--gris-oscuro);
+    display: flex; align-items: center; gap: .75rem; font-weight: 300;
+  }
+  .incluye-list li::before { content: '✓'; color: var(--azul); font-weight: 900; font-size: 0.8rem; }
+  .pago-title { font-size: 0.7rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gris-medio); margin-bottom: .8rem; }
+  .pago-pills { display: flex; gap: .5rem; flex-wrap: wrap; }
+  .pago-pill {
+    border: 1px solid var(--borde); padding: .4rem 1rem;
+    font-size: 0.8rem; font-weight: 600; color: var(--gris-oscuro);
+    background: var(--blanco);
+  }
+
+  /* FORM */
+  .form-card { background: var(--blanco); padding: 2.5rem; border: 1px solid var(--borde); }
+  .form-card h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.6rem; font-weight: 900; text-transform: uppercase;
+    letter-spacing: 1px; margin-bottom: 2rem; color: var(--negro);
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+  .form-group { display: flex; flex-direction: column; gap: .4rem; }
+  .form-group.full { grid-column: 1 / -1; }
+  label { font-size: 0.68rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gris-medio); }
+  input, select, textarea {
+    background: var(--gris-claro); border: 1px solid var(--borde);
+    color: var(--negro); padding: .75rem 1rem;
+    font-family: 'Barlow', sans-serif; font-size: 0.9rem;
+    outline: none; transition: border .15s;
+    -webkit-appearance: none; appearance: none;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--azul); background: var(--blanco); }
+  .btn-submit {
+    width: 100%; background: var(--azul); color: var(--blanco);
+    border: none; padding: 1rem; margin-top: 1.2rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.1rem; font-weight: 800; letter-spacing: 2px;
+    text-transform: uppercase; cursor: pointer; transition: background .15s;
+  }
+  .btn-submit:hover { background: var(--azul-dark); }
+  .form-legal { font-size: 0.75rem; color: var(--gris-medio); margin-top: .8rem; text-align: center; line-height: 1.5; }
+  .form-legal a { color: var(--azul); }
+
+  /* ── PREMIOS ── */
+  #premios { background: var(--negro); }
+  #premios .section-eyebrow { color: rgba(255,255,255,.5); }
+  #premios .section-eyebrow::before { background: rgba(255,255,255,.3); }
+  #premios .section-title { color: var(--blanco); }
+  .premios-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,.1); margin-top: 3rem; }
+  .premio-card { background: var(--negro); padding: 3rem 2rem; text-align: center; transition: background .2s; }
+  .premio-card:hover { background: #1a1a1a; }
+  .premio-rank {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 5rem; font-weight: 900; line-height: 1;
+    color: rgba(255,255,255,.08); margin-bottom: .5rem;
+  }
+  .premio-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.6rem; font-weight: 900; text-transform: uppercase;
+    letter-spacing: 1px; color: var(--blanco); margin-bottom: 1rem;
+  }
+  .premio-card.gold .premio-title { color: #E8C000; }
+  .premio-card.silver .premio-title { color: #B8B8B8; }
+  .premio-card.bronze .premio-title { color: #C4783D; }
+  .premio-items { list-style: none; }
+  .premio-items li {
+    padding: .5rem 0; border-bottom: 1px solid rgba(255,255,255,.07);
+    font-size: 0.88rem; color: rgba(255,255,255,.55); font-weight: 300;
+  }
+  .premio-items li:last-child { border-bottom: none; }
+
+  /* ── GALERÍA ── */
+  #galeria { background: var(--blanco); }
+  .galeria-intro { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem; }
+  .galeria-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 200px 200px;
+    gap: 4px;
+  }
+  .galeria-item {
+    background: var(--gris-claro);
+    overflow: hidden; position: relative;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.5rem; color: var(--borde);
+    cursor: pointer;
+  }
+  .galeria-item.span2 { grid-column: span 2; }
+  .galeria-item.span-row { grid-row: span 2; }
+  .galeria-overlay {
+    position: absolute; inset: 0;
+    background: rgba(0,61,165,.7);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity .2s;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.85rem; font-weight: 800; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--blanco);
+  }
+  .galeria-item:hover .galeria-overlay { opacity: 1; }
+  .galeria-label {
+    position: absolute; bottom: .8rem; left: .8rem;
+    background: var(--blanco); color: var(--negro);
+    font-size: 0.65rem; letter-spacing: 1.5px; text-transform: uppercase;
+    font-weight: 700; padding: .25rem .6rem;
+  }
+
+  /* ── UBICACIÓN ── */
+  #ubicacion { background: var(--gris-claro); }
+  .ubic-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 4rem; margin-top: 3rem; align-items: start; }
+  .ubic-info h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 2rem; font-weight: 900; text-transform: uppercase;
+    letter-spacing: 1px; margin-bottom: 2rem; color: var(--negro);
+  }
+  .ubic-row {
+    display: flex; gap: 1rem; padding: 1rem 0;
+    border-bottom: 1px solid var(--borde);
+    align-items: flex-start;
+  }
+  .ubic-icon-box {
+    width: 36px; height: 36px; background: var(--azul-light);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; flex-shrink: 0; margin-top: 2px;
+  }
+  .ubic-row-title { font-size: 0.7rem; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700; color: var(--gris-medio); margin-bottom: .25rem; }
+  .ubic-row-val { font-size: 0.92rem; color: var(--gris-oscuro); font-weight: 300; line-height: 1.5; }
+  .ubic-row-val strong { color: var(--negro); font-weight: 600; }
+  .map-box {
+    background: var(--blanco); border: 1px solid var(--borde);
+    min-height: 380px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 1rem;
+  }
+  .map-box-icon { font-size: 3rem; opacity: .2; }
+  .map-box-text { font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; color: var(--gris-medio); font-weight: 600; }
+
+  /* ── FAQ ── */
+  #faq { background: var(--blanco); }
+  .faq-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 5rem; margin-top: 3rem; }
+  .faq-side h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.5rem; font-weight: 900; text-transform: uppercase;
+    line-height: 1.1; color: var(--negro); margin-bottom: 1rem;
+  }
+  .faq-side p { font-size: 0.9rem; color: var(--gris-medio); line-height: 1.7; font-weight: 300; }
+  .faq-list { }
+  .faq-item { border-bottom: 1px solid var(--borde); }
+  .faq-q {
+    padding: 1.2rem 0; cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.95rem; font-weight: 600; color: var(--negro);
+    transition: color .15s; gap: 1rem;
+  }
+  .faq-q:hover { color: var(--azul); }
+  .faq-arrow { color: var(--azul); transition: transform .25s; flex-shrink: 0; font-size: 0.8rem; }
+  .faq-item.open .faq-arrow { transform: rotate(45deg); }
+  .faq-a { display: none; padding: 0 0 1.2rem; font-size: 0.9rem; color: var(--gris-medio); line-height: 1.75; font-weight: 300; max-width: 560px; }
+  .faq-item.open .faq-a { display: block; }
+
+  /* ── CONTACTO ── */
+  #contacto { background: var(--azul); color: var(--blanco); }
+  .contacto-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+  .contacto-text .section-eyebrow { color: rgba(255,255,255,.6); }
+  .contacto-text .section-eyebrow::before { background: rgba(255,255,255,.4); }
+  .contacto-text .section-title { color: var(--blanco); }
+  .contacto-text p { font-size: 1rem; color: rgba(255,255,255,.7); line-height: 1.7; font-weight: 300; }
+  .contact-block { }
+  .contact-item {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 1.2rem 0; border-bottom: 1px solid rgba(255,255,255,.15);
+  }
+  .contact-icon { font-size: 1.2rem; opacity: .7; }
+  .contact-label { font-size: 0.68rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,.5); margin-bottom: .2rem; }
+  .contact-val { color: var(--blanco); font-weight: 500; }
+  .contact-val a { color: var(--blanco); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,.3); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--negro); padding: 2rem 4rem;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-brand {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: 1.2rem; letter-spacing: 3px;
+    text-transform: uppercase; color: rgba(255,255,255,.3);
+  }
+  footer p { font-size: 0.75rem; color: rgba(255,255,255,.3); }
+  footer a { color: rgba(255,255,255,.5); text-decoration: none; }
+  footer a:hover { color: var(--blanco); }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 0 1.5rem; }
+    .nav-links { display: none; }
+    #inicio { grid-template-columns: 1fr; }
+    .hero-visual { min-height: 300px; }
+    .hero-content { padding: 3rem 1.5rem; }
+    .countdown-bar { padding: 1.5rem; }
+    section { padding: 4rem 1.5rem; }
+    .sobre-grid, .inscr-layout, .ubic-grid, .faq-layout, .contacto-inner, .formato-layout { grid-template-columns: 1fr; gap: 2.5rem; }
+    .premios-grid { grid-template-columns: 1fr; }
+    .galeria-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+    .galeria-item.span2, .galeria-item.span-row { grid-column: auto; grid-row: auto; }
+    footer { padding: 1.5rem; flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-center">
+    <div class="nav-logo-wrap">
+      <a href="#inicio">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 88" height="28" aria-label="ASICS">
+          <g>
+            <path fill="#000066" d="M29.219,60.303c-4.446,0-6.583-3.418-5.467-7.372c2.304-8.195,17.109-20.339,27.198-20.339 c7.357,0,6.797,6.583,2.484,12.198l-2.384,2.639C42.499,55.82,34.572,60.303,29.219,60.303 M65.279,5.041 c-12.876,0.005-27.055,7.882-35.96,15.342l0.703,1.019c13.822-9.689,33.001-15.989,38.288-6.539 c2.792,4.985-1.947,15.053-8.621,23.01c1.596-3.514,0.542-10.261-8.764-10.261C35.455,27.612,5,48.105,5,69.078 c0,8.401,5.828,13.882,15.428,13.882c25.696,0,60.544-42.12,60.544-63.275C80.972,12.212,76.673,5.041,65.279,5.041"/>
+            <path fill="#000066" d="M98.361,60.303c-1.496,0-2.741-0.522-3.52-1.475c-0.812-0.999-1.054-2.415-0.669-3.877 c0.855-3.172,4.274-5.664,7.79-5.664h8.27l-2.955,11.016H98.361z M122.129,27.279c-2.365-2.908-6.194-4.209-8.934-4.209H98.167 l-2.551,9.514h14.173l1.358,0.143c0.014,0,1.301,0.15,2.019,1.116c0.58,0.808,0.665,2.008,0.248,3.582l-0.67,2.504h-8.93 c-7.686,0-18.401,5.514-20.79,14.42c-1.188,4.441-0.147,8.288,2.161,11.115c2.29,2.806,6.612,4.355,11.281,4.355h8.27h-0.005 h10.511l4.93-18.411l3.629-13.533C125.226,32.554,123.682,29.174,122.129,27.279"/>
+            <path fill="#000066" d="M225.361,23.07c-4.066,0-7.844,1.203-10.916,3.48c-3.102,2.297-4.813,5.057-5.833,8.864 c-2.213,8.251,4.271,12.233,9.481,15.056c3.737,2.024,6.969,3.77,6.269,6.356c-0.494,1.856-1.305,3.48-5.902,3.48h-14.033 l-2.546,9.513h15.533c4.165,0,8.009-0.867,11.106-3.245c3.1-2.386,4.852-5.71,5.935-9.767c1.04-3.861,0.339-7.549-2.146-10.301 c-2.071-2.311-5.05-3.916-7.675-5.334c-3.364-1.81-6.536-3.518-5.982-5.588c0.339-1.253,1.582-3,4.299-3h13.651l2.552-9.514 H225.361z"/>
+            <path fill="#000066" d="M143.921,23.07c-4.065,0-7.842,1.203-10.915,3.48c-3.102,2.297-4.813,5.057-5.843,8.864 c-2.208,8.251,4.281,12.233,9.49,15.056c3.739,2.024,6.963,3.77,6.27,6.356c-0.499,1.856-1.306,3.48-5.903,3.48h-14.031 l-2.551,9.513h15.532c4.17,0,8.013-0.867,11.11-3.245c3.105-2.386,4.853-5.71,5.936-9.767c1.036-3.861,0.334-7.549-2.141-10.301 c-2.071-2.311-5.055-3.916-7.685-5.334c-3.359-1.81-6.527-3.518-5.972-5.588c0.333-1.253,1.581-3,4.293-3h13.643l2.556-9.514 H143.921z"/>
+            <polygon fill="#000066" points="165.115,23.07 152.932,69.819 163.225,69.819 175.398,23.07"/>
+            <path fill="#000066" d="M202.781,23.07c-18.121,0.065-27.604,12.133-30.614,23.375c-3.566,13.33,3.53,23.375,16.507,23.375h8.696 l2.546-9.513h-8.693c-4.857,0-11.536-3.822-8.844-13.862c2.138-7.98,9.919-13.86,18.454-13.86h5.522l2.551-9.514H202.781z"/>
+          </g>
+        </svg>
+      </a>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#sobre">El torneo</a></li>
+      <li><a href="#categorias">Categorías</a></li>
+      <li><a href="#inscripciones">Inscripción</a></li>
+      <li><a href="#premios">Premios</a></li>
+      <li><a href="#ubicacion">Ubicación</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+  </div>
+  <div class="nav-right">
+    <a href="#inscripciones" class="nav-cta">Inscribirme</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="inicio">
+  <div class="hero-content">
+    <span class="hero-eyebrow">ASICS Pádel Open — Edición 2025</span>
+    <h1 class="hero-title">El torneo<br>que te<br><em>reta.</em></h1>
+    <p class="hero-desc">
+      Compite en el torneo de pádel oficial patrocinado por ASICS.
+      Categorías para todos los niveles, ambiente inmejorable y
+      premios para los mejores. ¿Estás listo?
+    </p>
+    <div class="hero-actions">
+      <a href="#inscripciones" class="btn-primary">Inscribirme ahora</a>
+      <a href="#sobre" class="btn-ghost">Saber más</a>
+    </div>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Fecha</div>
+        <div class="hero-meta-value">DD de Mes, 2025</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Lugar</div>
+        <div class="hero-meta-value">Nombre del Club · Ciudad</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Plazas</div>
+        <div class="hero-meta-value">Limitadas</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Inscripción</div>
+        <div class="hero-meta-value">XX € / pareja</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-bg-lines"></div>
+    <div class="hero-visual-inner">
+      <div class="hero-shoe-placeholder">
+        <span>🏆</span>
+        Imagen del torneo / club
+      </div>
+    </div>
+    <div class="hero-badge-float">Inscripciones abiertas</div>
+  </div>
+</section>
+
+<!-- CONTADOR -->
+<div class="countdown-bar">
+  <div class="countdown-label">Inscripciones abiertas · Cierre del torneo en:</div>
+  <div class="countdown-units">
+    <div class="countdown-unit">
+      <span class="countdown-num" id="c-dias">--</span>
+      <span class="countdown-unit-label">Días</span>
+    </div>
+    <span class="countdown-sep">:</span>
+    <div class="countdown-unit">
+      <span class="countdown-num" id="c-horas">--</span>
+      <span class="countdown-unit-label">Horas</span>
+    </div>
+    <span class="countdown-sep">:</span>
+    <div class="countdown-unit">
+      <span class="countdown-num" id="c-min">--</span>
+      <span class="countdown-unit-label">Min</span>
+    </div>
+    <span class="countdown-sep">:</span>
+    <div class="countdown-unit">
+      <span class="countdown-num" id="c-seg">--</span>
+      <span class="countdown-unit-label">Seg</span>
+    </div>
+  </div>
+  <a href="#inscripciones" class="btn-primary" style="background:rgba(255,255,255,.15); flex-shrink:0;">Inscribirme ahora →</a>
+</div>
+
+<hr class="divider">
+
+<!-- SOBRE EL EVENTO -->
+<section id="sobre">
+  <div class="container">
+    <div class="sobre-grid">
+      <div class="sobre-text">
+        <p class="section-eyebrow">Sobre el torneo</p>
+        <h2 class="section-title">Compite.<br>Disfruta.<br>Gana.</h2>
+        <p>
+          El <strong>ASICS Pádel Open</strong> es un torneo por parejas organizado
+          en colaboración con ASICS, diseñado para jugadores de todos los niveles
+          que quieran vivir el pádel de forma competitiva y en un ambiente festivo.
+        </p>
+        <p>
+          Partidos en formato eliminatorio, categorías diferenciadas y
+          una organización cuidada al detalle para que solo tengas que
+          preocuparte de <strong>dar lo mejor en pista</strong>.
+        </p>
+        <p>
+          Todos los participantes recibirán un welcome pack oficial de ASICS
+          y los mejores se llevarán premios exclusivos de la marca.
+        </p>
+        <div class="stats-row">
+          <div class="stat-item"><div class="stat-number">XX</div><div class="stat-label">Parejas máx.</div></div>
+          <div class="stat-item"><div class="stat-number">X</div><div class="stat-label">Días de torneo</div></div>
+          <div class="stat-item"><div class="stat-number">5</div><div class="stat-label">Categorías</div></div>
+        </div>
+      </div>
+      <div class="sobre-visual">
+        📸
+        <div class="sobre-visual-label">Foto del torneo / club</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- CATEGORÍAS -->
+<section id="categorias">
+  <div class="container">
+    <p class="section-eyebrow">Categorías</p>
+    <h2 class="section-title">¿En qué nivel<br>participas?</h2>
+    <div class="cats-grid">
+      <div class="cat-card"><div class="cat-num">01</div><div class="cat-name">1ª Masculino</div><div class="cat-desc">Nivel avanzado y competición</div></div>
+      <div class="cat-card"><div class="cat-num">02</div><div class="cat-name">2ª Masculino</div><div class="cat-desc">Nivel medio-alto</div></div>
+      <div class="cat-card"><div class="cat-num">03</div><div class="cat-name">3ª Masculino</div><div class="cat-desc">Iniciación y recreativo</div></div>
+      <div class="cat-card"><div class="cat-num">04</div><div class="cat-name">Femenino</div><div class="cat-desc">Todos los niveles</div></div>
+      <div class="cat-card"><div class="cat-num">05</div><div class="cat-name">Mixto</div><div class="cat-desc">Pareja mixta</div></div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- FORMATO -->
+<section id="formato">
+  <div class="container">
+    <p class="section-eyebrow">Formato y reglamento</p>
+    <h2 class="section-title">Cómo se<br>juega</h2>
+    <div class="formato-layout">
+      <div class="formato-block">
+        <h3>Formato</h3>
+        <ul class="formato-list">
+          <li>Fase de grupos: todos contra todos</li>
+          <li>Rondas eliminatorias por bracket</li>
+          <li>Sets a 6 juegos, tie-break en 6-6</li>
+          <li>Super tie-break en el 3er set (10 puntos)</li>
+          <li>Sin tiempo límite en semifinales y final</li>
+          <li>Árbitros designados por la organización</li>
+        </ul>
+      </div>
+      <div class="formato-block">
+        <h3>Reglamento</h3>
+        <ul class="formato-list">
+          <li>Reglamento oficial FEP</li>
+          <li>Inscripción por parejas</li>
+          <li>Cambio de pareja permitido hasta 48h antes</li>
+          <li>Horarios publicados con 48h de antelación</li>
+          <li>Pistas cubiertas disponibles en caso de lluvia</li>
+          <li>La organización se reserva el derecho de admisión por categoría</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- INSCRIPCIONES -->
+<section id="inscripciones">
+  <div class="container">
+    <p class="section-eyebrow">Inscripciones</p>
+    <h2 class="section-title">Reserva tu plaza</h2>
+    <div class="inscr-layout">
+      <div class="precio-bloque">
+        <div class="precio-tag">XX€</div>
+        <div class="precio-sub">Por pareja · IVA incluido</div>
+        <div class="deadline-pill">⏱ Fecha límite: DD de Mes 2025</div>
+        <div class="incluye-title">La inscripción incluye</div>
+        <ul class="incluye-list">
+          <li>Welcome pack oficial ASICS</li>
+          <li>Bolas para todos los partidos</li>
+          <li>Premios para los tres primeros clasificados</li>
+          <li>Reportaje fotográfico del torneo</li>
+          <li>Acceso a vestuarios y zona de descanso</li>
+          <li>Seguro de accidentes durante el torneo</li>
+          <li>Sorteos y actividades entre partidos</li>
+        </ul>
+        <div class="pago-title">Métodos de pago</div>
+        <div class="pago-pills">
+          <span class="pago-pill">Bizum</span>
+          <span class="pago-pill">Transferencia</span>
+          <span class="pago-pill">Pago online</span>
+        </div>
+      </div>
+      <div class="form-card">
+        <h3>Formulario de inscripción</h3>
+        <div class="form-row">
+          <div class="form-group"><label>Nombre — Jugador 1</label><input type="text" placeholder="Nombre completo"></div>
+          <div class="form-group"><label>Nombre — Jugador 2</label><input type="text" placeholder="Nombre de tu pareja"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Email</label><input type="email" placeholder="correo@ejemplo.com"></div>
+          <div class="form-group"><label>Teléfono</label><input type="tel" placeholder="+34 600 000 000"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group full">
+            <label>Categoría</label>
+            <select>
+              <option value="">Selecciona tu categoría</option>
+              <option>1ª Masculino</option>
+              <option>2ª Masculino</option>
+              <option>3ª Masculino</option>
+              <option>Femenino</option>
+              <option>Mixto</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group full"><label>Comentarios (opcional)</label><textarea rows="2" placeholder="¿Alguna pregunta o comentario?"></textarea></div>
+        </div>
+        <button class="btn-submit">Enviar inscripción</button>
+        <p class="form-legal">Al inscribirte aceptas los <a href="#">términos y condiciones</a> del torneo y la <a href="#">política de privacidad</a> de ASICS.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- PREMIOS -->
+<section id="premios">
+  <div class="container">
+    <p class="section-eyebrow">Premios</p>
+    <h2 class="section-title">Compite por<br>el top</h2>
+    <div class="premios-grid">
+      <div class="premio-card gold">
+        <div class="premio-rank">01</div>
+        <div class="premio-title">Campeones</div>
+        <ul class="premio-items">
+          <li>Trofeos individuales</li>
+          <li>Welcome pack premium ASICS</li>
+          <li>Producto exclusivo de la nueva colección</li>
+          <li>Reportaje fotográfico</li>
+        </ul>
+      </div>
+      <div class="premio-card silver">
+        <div class="premio-rank">02</div>
+        <div class="premio-title">Subcampeones</div>
+        <ul class="premio-items">
+          <li>Trofeos individuales</li>
+          <li>Welcome pack ASICS</li>
+          <li>Descuento exclusivo en tienda</li>
+        </ul>
+      </div>
+      <div class="premio-card bronze">
+        <div class="premio-rank">03</div>
+        <div class="premio-title">Tercer puesto</div>
+        <ul class="premio-items">
+          <li>Trofeos individuales</li>
+          <li>Premio sorpresa ASICS</li>
+          <li>Reconocimiento oficial</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- GALERÍA -->
+<section id="galeria">
+  <div class="container">
+    <div class="galeria-intro">
+      <div>
+        <p class="section-eyebrow">Galería</p>
+        <h2 class="section-title">Vive el ambiente</h2>
+      </div>
+      <p style="color:var(--gris-medio); font-size:.85rem; max-width:320px; text-align:right; font-weight:300; line-height:1.6;">Fotos del club y ediciones anteriores. Se sustituirán por imágenes reales del torneo.</p>
+    </div>
+    <div class="galeria-grid">
+      <div class="galeria-item span2 span-row">🏟️<div class="galeria-overlay">Ver foto</div><div class="galeria-label">El club</div></div>
+      <div class="galeria-item">🎾<div class="galeria-overlay">Ver foto</div></div>
+      <div class="galeria-item">👟<div class="galeria-overlay">Ver foto</div></div>
+      <div class="galeria-item">🏅<div class="galeria-overlay">Ver foto</div></div>
+      <div class="galeria-item">📸<div class="galeria-overlay">Ver foto</div></div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- UBICACIÓN -->
+<section id="ubicacion">
+  <div class="container">
+    <p class="section-eyebrow">Ubicación</p>
+    <h2 class="section-title">Cómo llegar</h2>
+    <div class="ubic-grid">
+      <div class="ubic-info">
+        <h3>Nombre del Club</h3>
+        <div class="ubic-row">
+          <div class="ubic-icon-box">📍</div>
+          <div><div class="ubic-row-title">Dirección</div><div class="ubic-row-val"><strong>Calle del Club, XX · Ciudad</strong><br>Código Postal</div></div>
+        </div>
+        <div class="ubic-row">
+          <div class="ubic-icon-box">🚗</div>
+          <div><div class="ubic-row-title">Parking</div><div class="ubic-row-val">Aparcamiento gratuito para participantes. Acceso por la puerta principal del club.</div></div>
+        </div>
+        <div class="ubic-row">
+          <div class="ubic-icon-box">🚿</div>
+          <div><div class="ubic-row-title">Vestuarios</div><div class="ubic-row-val">Vestuarios con ducha disponibles durante todo el torneo.</div></div>
+        </div>
+        <div class="ubic-row">
+          <div class="ubic-icon-box">🚇</div>
+          <div><div class="ubic-row-title">Transporte público</div><div class="ubic-row-val">Metro línea X, parada [Nombre]. Autobús: líneas XX.</div></div>
+        </div>
+      </div>
+      <div class="map-box">
+        <div class="map-box-icon">🗺️</div>
+        <div class="map-box-text">Mapa Google Maps integrado</div>
+        <p style="font-size:.75rem; color:var(--gris-medio); margin-top:.5rem;">Se integrará con la dirección real del club</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="container">
+    <div class="faq-layout">
+      <div class="faq-side">
+        <p class="section-eyebrow">FAQ</p>
+        <h2 class="section-title">Preguntas<br>frecuentes</h2>
+        <p>¿No encuentras lo que buscas? Escríbenos directamente y te respondemos en menos de 24 horas.</p>
+        <br>
+        <a href="#contacto" class="btn-ghost">Contactar</a>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">¿Puedo cambiar de pareja? <span class="faq-arrow">+</span></div>
+          <div class="faq-a">Sí. Los cambios de pareja están permitidos hasta 48 horas antes del inicio del torneo. Escríbenos por email indicando los nombres de ambos jugadores y la nueva composición.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">¿Qué ocurre si me lesiono? <span class="faq-arrow">+</span></div>
+          <div class="faq-a">En caso de lesión antes del inicio del torneo, se reembolsará el importe de la inscripción con justificante médico. Durante el torneo, la pareja puede ser sustituida previa comunicación a la organización.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">¿Puedo cancelar la inscripción? <span class="faq-arrow">+</span></div>
+          <div class="faq-a">Las cancelaciones con más de 10 días de antelación tienen derecho a reembolso completo. Con menos de 10 días, se reembolsará el 50%. Pasada la fecha límite de inscripción, no habrá reembolso.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">¿Cuándo se publican los horarios? <span class="faq-arrow">+</span></div>
+          <div class="faq-a">Los horarios de la fase de grupos se publicarán 48 horas antes del inicio del torneo. Los de las rondas eliminatorias se publicarán el mismo día una vez conocidos los resultados.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">¿Qué nivel necesito para participar? <span class="faq-arrow">+</span></div>
+          <div class="faq-a">El torneo tiene categorías para todos los niveles, desde iniciación hasta competición avanzada. Si tienes dudas sobre en qué categoría inscribirte, contáctanos y te ayudamos a encontrar la más adecuada.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">¿Qué incluye el welcome pack? <span class="faq-arrow">+</span></div>
+          <div class="faq-a">El welcome pack incluye bolsa deportiva oficial del torneo, productos de ASICS y acceso a todas las actividades del evento. Los campeones recibirán un pack premium con producto exclusivo de la marca.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- CONTACTO -->
+<section id="contacto">
+  <div class="container">
+    <div class="contacto-inner">
+      <div class="contacto-text">
+        <p class="section-eyebrow">Contacto</p>
+        <h2 class="section-title">¿Tienes<br>alguna duda?</h2>
+        <p>Estamos aquí para ayudarte. Escríbenos y te responderemos lo antes posible.</p>
+      </div>
+      <div class="contact-block">
+        <div class="contact-item">
+          <span class="contact-icon">📧</span>
+          <div><div class="contact-label">Email</div><div class="contact-val"><a href="/cdn-cgi/l/email-protection#41312025242d0120322822326f222e2c"><span class="__cf_email__" data-cfemail="23534247464f6342504a40500d404c4e">[email&#160;protected]</span></a></div></div>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">📱</span>
+          <div><div class="contact-label">Teléfono / WhatsApp</div><div class="contact-val">+34 600 000 000</div></div>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">🌐</span>
+          <div><div class="contact-label">Web oficial ASICS</div><div class="contact-val"><a href="https://www.asics.com/es/es-es/" target="_blank">asics.com/es/es-es</a></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">ASICS · Pádel Open 2025</div>
+  <p>© 2025 ASICS Europe B.V. · <a href="#">Política de privacidad</a> · <a href="#">Términos y condiciones</a></p>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  // Actualiza esta fecha cuando se confirme
+  const DEADLINE = new Date('2025-06-01T23:59:59').getTime();
+
+  function updateTimer() {
+    const diff = DEADLINE - Date.now();
+    if (diff <= 0) {
+      document.querySelector('.countdown-bar').innerHTML =
+        '<p style="color:rgba(255,255,255,.8);letter-spacing:2px;text-transform:uppercase;font-size:.9rem;font-weight:600;">Inscripciones cerradas</p>';
+      return;
+    }
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    document.getElementById('c-dias').textContent  = String(d).padStart(2,'0');
+    document.getElementById('c-horas').textContent = String(h).padStart(2,'0');
+    document.getElementById('c-min').textContent   = String(m).padStart(2,'0');
+    document.getElementById('c-seg').textContent   = String(s).padStart(2,'0');
+  }
+  updateTimer();
+  setInterval(updateTimer, 1000);
+
+  // FAQ
+  function toggleFaq(el) {
+    el.parentElement.classList.toggle('open');
+  }
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.cat-card, .stat-item, .premio-card, .fa
