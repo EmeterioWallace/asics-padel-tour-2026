@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<meta name="cf-2fa-verify" content="off"><!-- cloudflare email obfuscation off -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ASICS Pádel Open – Torneo oficial de pádel</title>
+<link rel="icon" type="image/png" href="images/brand/logo-asics.png">
+<link rel="shortcut icon" href="images/brand/logo-asics.png">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -129,21 +132,13 @@
     display: flex; align-items: center; justify-content: center;
     min-height: 600px;
   }
-  .hero-visual-inner {
-    display: flex; flex-direction: column; align-items: center;
-    justify-content: center; gap: 1.5rem; z-index: 1;
+  .hero-visual img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: center bottom;
+    display: block;
   }
-  .hero-shoe-placeholder {
-    width: 320px; height: 200px;
-    background: rgba(0,61,165,0.08);
-    border: 2px dashed rgba(0,61,165,0.2);
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    gap: .5rem; color: var(--azul);
-    font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase;
-    font-weight: 600;
-  }
-  .hero-shoe-placeholder span { font-size: 3.5rem; opacity: .4; }
+  .hero-visual-inner { display: none; }
   .hero-badge-float {
     position: absolute; top: 2rem; right: 2rem;
     background: var(--rojo); color: var(--blanco);
@@ -227,6 +222,12 @@
     display: flex; align-items: center; justify-content: center;
     font-size: 6rem; color: var(--borde);
     position: relative; overflow: hidden;
+  }
+  .sobre-visual img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: center;
+    display: block;
   }
   .sobre-visual-label {
     position: absolute; bottom: 1.5rem; left: 1.5rem;
@@ -385,6 +386,12 @@
     font-size: 2.5rem; color: var(--borde);
     cursor: pointer;
   }
+  .galeria-item img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: center;
+    display: block;
+  }
   .galeria-item.span2 { grid-column: span 2; }
   .galeria-item.span-row { grid-row: span 2; }
   .galeria-overlay {
@@ -488,20 +495,209 @@
   footer a { color: rgba(255,255,255,.5); text-decoration: none; }
   footer a:hover { color: var(--blanco); }
 
-  /* RESPONSIVE */
+  /* ── RESPONSIVE ── */
+
+  /* Hamburger button — oculto en desktop */
+  .nav-hamburger {
+    display: none;
+    flex-direction: column; justify-content: center; gap: 5px;
+    width: 36px; height: 36px; cursor: pointer;
+    background: none; border: none; padding: 4px;
+    flex-shrink: 0; margin-left: auto;
+  }
+  .nav-hamburger span {
+    display: block; width: 22px; height: 2px;
+    background: var(--azul); transition: all .25s;
+  }
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* Menú móvil desplegable */
+  .nav-mobile-menu {
+    display: none;
+    position: fixed; top: 60px; left: 0; right: 0;
+    background: var(--blanco); border-bottom: 1px solid var(--borde);
+    z-index: 9999; flex-direction: column; padding: 1rem 0;
+    box-shadow: 0 4px 20px rgba(0,0,0,.08);
+  }
+  .nav-mobile-menu.open { display: flex; }
+  .nav-mobile-menu a {
+    display: block; padding: .9rem 2rem;
+    font-size: 0.95rem; font-weight: 500; color: var(--azul);
+    text-decoration: none; border-bottom: 1px solid var(--gris-claro);
+    font-family: 'Barlow', sans-serif;
+  }
+  .nav-mobile-menu a:last-child { border-bottom: none; }
+  .nav-mobile-menu .nav-cta-mobile {
+    margin: 1rem 2rem 0.5rem;
+    background: var(--azul); color: var(--blanco);
+    text-align: center; padding: .9rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem; font-weight: 800; letter-spacing: 2px;
+    text-transform: uppercase; border-bottom: none;
+  }
+
   @media (max-width: 900px) {
+
+    /* NAV */
     nav { padding: 0 1.5rem; }
     .nav-links { display: none; }
-    #inicio { grid-template-columns: 1fr; }
-    .hero-visual { min-height: 300px; }
-    .hero-content { padding: 3rem 1.5rem; }
-    .countdown-bar { padding: 1.5rem; }
-    section { padding: 4rem 1.5rem; }
-    .sobre-grid, .inscr-layout, .ubic-grid, .faq-layout, .contacto-inner, .formato-layout { grid-template-columns: 1fr; gap: 2.5rem; }
-    .premios-grid { grid-template-columns: 1fr; }
-    .galeria-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
-    .galeria-item.span2, .galeria-item.span-row { grid-column: auto; grid-row: auto; }
-    footer { padding: 1.5rem; flex-direction: column; text-align: center; }
+    .nav-right { display: none; }
+    .nav-hamburger { display: flex; }
+    .nav-center { justify-content: flex-start; }
+    .nav-logo-wrap img { height: 50px; }
+
+    /* HERO */
+    #inicio {
+      grid-template-columns: 1fr;
+      min-height: auto;
+      padding-top: 60px;
+    }
+    .hero-content {
+      padding: 3rem 1.5rem 2rem;
+      order: 2;
+    }
+    .hero-visual {
+      order: 1;
+      min-height: 55vw;
+      max-height: 400px;
+    }
+    .hero-badge-float {
+      top: auto;
+      bottom: 1rem;
+      left: 1rem;
+      right: auto;
+      font-size: 0.7rem;
+      padding: .35rem .7rem;
+    }
+    .hero-title { font-size: clamp(2.8rem, 10vw, 4rem); }
+    .hero-desc { font-size: 0.95rem; margin-bottom: 1.5rem; }
+    .hero-actions { gap: 1rem; }
+    .hero-meta { gap: 1rem; margin-top: 2rem; padding-top: 1.5rem; }
+    .hero-meta-item { min-width: calc(50% - .5rem); }
+
+    /* COUNTDOWN */
+    .countdown-bar {
+      padding: 1.5rem;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.2rem;
+    }
+    .countdown-label { font-size: 0.9rem; }
+    .countdown-units { gap: 1rem; }
+    .countdown-num { font-size: 2rem; }
+    .countdown-bar .btn-primary { width: 100%; text-align: center; }
+
+    /* SECTIONS */
+    section { padding: 3.5rem 1.5rem; }
+
+    /* PATROCINADORES */
+  .patrocinadores-bar {
+    background: var(--blanco);
+    border-bottom: 1px solid var(--borde);
+    padding: 1.5rem 2rem;
+  }
+  .patrocinadores-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: center;
+    gap: 3rem; flex-wrap: wrap;
+  }
+  .patrocinadores-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--gris-medio);
+    flex-shrink: 0;
+  }
+  .patrocinadores-logos {
+    display: flex; align-items: center;
+    gap: 3rem; flex-wrap: wrap; justify-content: center;
+  }
+  .patrocinadores-logos a {
+    display: flex; align-items: center;
+    opacity: 0.75; transition: opacity .2s;
+  }
+  .patrocinadores-logos a:hover { opacity: 1; }
+  .patrocinadores-logos img {
+    height: auto;
+    width: auto;
+    display: block;
+    max-height: 40px;
+  }
+  .patrocinadores-logos a[href*="elcorteingles"] img { max-width: 120px; }
+  .patrocinadores-logos a[href*="estrelladamm"] img { max-width: 60px; max-height: 60px; }
+  .patrocinadores-logos a[href*="starvie"] img { max-width: 140px; }
+
+
+    .sobre-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .sobre-visual { min-height: 260px; }
+    .stats-row { grid-template-columns: repeat(3, 1fr); }
+    .stat-number { font-size: 2rem; }
+
+    /* CATEGORÍAS */
+    #categorias .container > div[style*="grid-template-columns:1fr 1fr 1fr"] {
+      grid-template-columns: 1fr !important;
+      gap: 2rem !important;
+    }
+
+    /* FORMATO */
+    .formato-layout { grid-template-columns: 1fr; gap: 2rem; }
+
+    /* INSCRIPCIONES */
+    .inscr-layout { grid-template-columns: 1fr; gap: 2rem; }
+    .precio-tag { font-size: 4rem; }
+
+    /* PREMIOS */
+    .premios-grid { grid-template-columns: 1fr; gap: 1px; }
+
+    /* GALERÍA */
+    .galeria-grid {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 180px 180px 180px;
+    }
+    .galeria-item { min-height: 180px; }
+    .galeria-item.span2 { grid-column: span 2; min-height: 200px; }
+    .galeria-item.span-row { grid-row: auto; }
+
+    /* LOGO HERO EN MÓVIL */
+    .hero-content img[alt="ASICS Padel Tour 2026"] {
+      display: none !important;
+    }
+
+    /* PATROCINADORES */
+    .patrocinadores-inner { gap: 1rem; flex-direction: column; }
+    .patrocinadores-logos { gap: 1.5rem; }
+    .patrocinadores-logos img { height: 28px; }
+
+    /* UBICACIÓN */
+    .ubic-grid { grid-template-columns: 1fr; gap: 2rem; }
+
+    /* FAQ */
+    .faq-layout { grid-template-columns: 1fr; gap: 2rem; }
+
+    /* CONTACTO */
+    .contacto-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+
+    /* FOOTER */
+    footer {
+      padding: 1.5rem;
+      flex-direction: column;
+      text-align: center;
+      gap: .75rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .hero-title { font-size: clamp(2.4rem, 12vw, 3rem); }
+    .hero-meta-item { min-width: 100%; }
+    .stats-row { grid-template-columns: 1fr; }
+    .stat-item { border-right: 1px solid var(--borde); border-bottom: none; }
+    .stat-item:last-child { border-bottom: 1px solid var(--borde); }
+    .galeria-grid { grid-template-columns: 1fr; }
+    .galeria-item { min-height: 220px; }
+    #categorias .container > div[style*="grid-template-columns:1fr 1fr 1fr"] {
+      grid-template-columns: 1fr !important;
+    }
   }
 </style>
 </head>
@@ -512,16 +708,7 @@
   <div class="nav-center">
     <div class="nav-logo-wrap">
       <a href="#inicio">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 88" height="28" aria-label="ASICS">
-          <g>
-            <path fill="#000066" d="M29.219,60.303c-4.446,0-6.583-3.418-5.467-7.372c2.304-8.195,17.109-20.339,27.198-20.339 c7.357,0,6.797,6.583,2.484,12.198l-2.384,2.639C42.499,55.82,34.572,60.303,29.219,60.303 M65.279,5.041 c-12.876,0.005-27.055,7.882-35.96,15.342l0.703,1.019c13.822-9.689,33.001-15.989,38.288-6.539 c2.792,4.985-1.947,15.053-8.621,23.01c1.596-3.514,0.542-10.261-8.764-10.261C35.455,27.612,5,48.105,5,69.078 c0,8.401,5.828,13.882,15.428,13.882c25.696,0,60.544-42.12,60.544-63.275C80.972,12.212,76.673,5.041,65.279,5.041"/>
-            <path fill="#000066" d="M98.361,60.303c-1.496,0-2.741-0.522-3.52-1.475c-0.812-0.999-1.054-2.415-0.669-3.877 c0.855-3.172,4.274-5.664,7.79-5.664h8.27l-2.955,11.016H98.361z M122.129,27.279c-2.365-2.908-6.194-4.209-8.934-4.209H98.167 l-2.551,9.514h14.173l1.358,0.143c0.014,0,1.301,0.15,2.019,1.116c0.58,0.808,0.665,2.008,0.248,3.582l-0.67,2.504h-8.93 c-7.686,0-18.401,5.514-20.79,14.42c-1.188,4.441-0.147,8.288,2.161,11.115c2.29,2.806,6.612,4.355,11.281,4.355h8.27h-0.005 h10.511l4.93-18.411l3.629-13.533C125.226,32.554,123.682,29.174,122.129,27.279"/>
-            <path fill="#000066" d="M225.361,23.07c-4.066,0-7.844,1.203-10.916,3.48c-3.102,2.297-4.813,5.057-5.833,8.864 c-2.213,8.251,4.271,12.233,9.481,15.056c3.737,2.024,6.969,3.77,6.269,6.356c-0.494,1.856-1.305,3.48-5.902,3.48h-14.033 l-2.546,9.513h15.533c4.165,0,8.009-0.867,11.106-3.245c3.1-2.386,4.852-5.71,5.935-9.767c1.04-3.861,0.339-7.549-2.146-10.301 c-2.071-2.311-5.05-3.916-7.675-5.334c-3.364-1.81-6.536-3.518-5.982-5.588c0.339-1.253,1.582-3,4.299-3h13.651l2.552-9.514 H225.361z"/>
-            <path fill="#000066" d="M143.921,23.07c-4.065,0-7.842,1.203-10.915,3.48c-3.102,2.297-4.813,5.057-5.843,8.864 c-2.208,8.251,4.281,12.233,9.49,15.056c3.739,2.024,6.963,3.77,6.27,6.356c-0.499,1.856-1.306,3.48-5.903,3.48h-14.031 l-2.551,9.513h15.532c4.17,0,8.013-0.867,11.11-3.245c3.105-2.386,4.853-5.71,5.936-9.767c1.036-3.861,0.334-7.549-2.141-10.301 c-2.071-2.311-5.055-3.916-7.685-5.334c-3.359-1.81-6.527-3.518-5.972-5.588c0.333-1.253,1.581-3,4.293-3h13.643l2.556-9.514 H143.921z"/>
-            <polygon fill="#000066" points="165.115,23.07 152.932,69.819 163.225,69.819 175.398,23.07"/>
-            <path fill="#000066" d="M202.781,23.07c-18.121,0.065-27.604,12.133-30.614,23.375c-3.566,13.33,3.53,23.375,16.507,23.375h8.696 l2.546-9.513h-8.693c-4.857,0-11.536-3.822-8.844-13.862c2.138-7.98,9.919-13.86,18.454-13.86h5.522l2.551-9.514H202.781z"/>
-          </g>
-        </svg>
+        <img src="images/brand/logo-torneo.png" alt="ASICS Padel Tour 2026" height="44" style="width:auto; max-width:120px; object-fit:contain;">
       </a>
     </div>
     <ul class="nav-links">
@@ -529,64 +716,74 @@
       <li><a href="#categorias">Categorías</a></li>
       <li><a href="#inscripciones">Inscripción</a></li>
       <li><a href="#premios">Premios</a></li>
+      <li><a href="#cuadros">Clasificación</a></li>
+      <li><a href="#galeria">Galería</a></li>
       <li><a href="#ubicacion">Ubicación</a></li>
+      <li><a href="docs/normativa-asics-padel-tour-2026.pdf" target="_blank">Normativa</a></li>
       <li><a href="#faq">FAQ</a></li>
     </ul>
   </div>
   <div class="nav-right">
-    <a href="#inscripciones" class="nav-cta">Inscribirme</a>
+    <a href="#inscripciones" class="nav-cta">Próximamente</a>
   </div>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- MENÚ MÓVIL -->
+<div class="nav-mobile-menu" id="nav-mobile-menu">
+  <a href="#sobre">El torneo</a>
+  <a href="#categorias">Categorías</a>
+  <a href="#inscripciones">Inscripción</a>
+  <a href="#premios">Premios</a>
+  <a href="#cuadros">Clasificación</a>
+  <a href="#galeria">Galería</a>
+  <a href="#ubicacion">Ubicación</a>
+  <a href="docs/normativa-asics-padel-tour-2026.pdf" target="_blank">Normativa</a>
+  <a href="#faq">FAQ</a>
+  <a href="#inscripciones" class="nav-cta-mobile">Próximamente</a>
+</div>
 
 <!-- HERO -->
 <section id="inicio">
   <div class="hero-content">
-    <span class="hero-eyebrow">ASICS Pádel Open — Edición 2025</span>
-    <h1 class="hero-title">El torneo<br>que te<br><em>reta.</em></h1>
-    <p class="hero-desc">
-      Compite en el torneo de pádel oficial patrocinado por ASICS.
-      Categorías para todos los niveles, ambiente inmejorable y
-      premios para los mejores. ¿Estás listo?
-    </p>
+    <img src="images/brand/logo-torneo.png" alt="ASICS Padel Tour 2026" style="width:206px; height:auto; display:block; margin-bottom:0.5rem; margin-left:0;">
+    <h1 class="hero-title">ASICS<br>PADEL<br><em>TOUR 2026</em></h1>
+    <p class="hero-desc">Vive la experiencia ASICS.</p>
     <div class="hero-actions">
-      <a href="#inscripciones" class="btn-primary">Inscribirme ahora</a>
+      <a href="#" class="btn-primary" style="opacity:0.6; cursor:default;" onclick="return false;">Inscripción próximamente</a>
       <a href="#sobre" class="btn-ghost">Saber más</a>
     </div>
     <div class="hero-meta">
       <div class="hero-meta-item">
-        <div class="hero-meta-label">Fecha</div>
-        <div class="hero-meta-value">DD de Mes, 2025</div>
+        <div class="hero-meta-label">Barcelona · Padel Tibidabo</div>
+        <div class="hero-meta-value">15, 16, 17 Mayo</div>
       </div>
       <div class="hero-meta-item">
-        <div class="hero-meta-label">Lugar</div>
-        <div class="hero-meta-value">Nombre del Club · Ciudad</div>
+        <div class="hero-meta-label">Marbella · El Mirador</div>
+        <div class="hero-meta-value">26, 27, 28 Junio</div>
       </div>
       <div class="hero-meta-item">
-        <div class="hero-meta-label">Plazas</div>
-        <div class="hero-meta-value">Limitadas</div>
+        <div class="hero-meta-label">Valencia · Calderona Wellness</div>
+        <div class="hero-meta-value">18, 19, 20 Sep.</div>
       </div>
       <div class="hero-meta-item">
-        <div class="hero-meta-label">Inscripción</div>
-        <div class="hero-meta-value">XX € / pareja</div>
+        <div class="hero-meta-label">Madrid · Campus 23: Club Padel Norte Madrid</div>
+        <div class="hero-meta-value">23, 24, 25 Oct.</div>
       </div>
     </div>
   </div>
   <div class="hero-visual">
-    <div class="hero-bg-lines"></div>
-    <div class="hero-visual-inner">
-      <div class="hero-shoe-placeholder">
-        <span>🏆</span>
-        Imagen del torneo / club
-      </div>
-    </div>
-    <div class="hero-badge-float">Inscripciones abiertas</div>
+    <img src="images/hero/hero-torneo.jpg" alt="ASICS Pádel Open 2025">
+    <div class="hero-badge-float">Próximamente</div>
   </div>
 </section>
 
 <!-- CONTADOR -->
 <div class="countdown-bar">
-  <div class="countdown-label">Inscripciones abiertas · Cierre del torneo en:</div>
-  <div class="countdown-units">
+  <div class="countdown-label" id="countdown-label">Cargando...</div>
+  <div class="countdown-units" id="countdown-units">
     <div class="countdown-unit">
       <span class="countdown-num" id="c-dias">--</span>
       <span class="countdown-unit-label">Días</span>
@@ -607,7 +804,25 @@
       <span class="countdown-unit-label">Seg</span>
     </div>
   </div>
-  <a href="#inscripciones" class="btn-primary" style="background:rgba(255,255,255,.15); flex-shrink:0;">Inscribirme ahora →</a>
+  <a href="#inscripciones" class="btn-primary" style="background:rgba(255,255,255,.15); flex-shrink:0;">Próximamente</a>
+</div>
+
+<!-- PATROCINADORES -->
+<div style="background:#fff; border-top:1px solid #e5e5e5; border-bottom:1px solid #e5e5e5; padding:2.5rem 2rem;">
+  <div style="max-width:1100px; margin:0 auto; text-align:center;">
+    <p style="font-family:'Barlow Condensed',sans-serif; font-size:0.75rem; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:#999; margin:0 0 1.5rem 0;">Colaboradores</p>
+    <div style="display:flex; align-items:center; justify-content:center; gap:4rem; flex-wrap:wrap;">
+      <a href="https://www.elcorteingles.es" target="_blank" rel="noopener" style="opacity:1; transition:opacity .2s;">
+        <img src="images/brand/logo-elcorteingles.png" alt="El Corte Inglés" style="height:60px; width:auto; display:block;">
+      </a>
+      <a href="https://www.estrelladamm.com" target="_blank" rel="noopener" style="opacity:1; transition:opacity .2s;">
+        <img src="images/brand/logo-estrelladamm.png" alt="Estrella Damm" style="height:70px; width:auto; display:block;">
+      </a>
+      <a href="https://www.starvie.com" target="_blank" rel="noopener" style="opacity:1; transition:opacity .2s;">
+        <img src="images/brand/logo-starvie.png" alt="StarVie" style="height:50px; width:auto; display:block;">
+      </a>
+    </div>
+  </div>
 </div>
 
 <hr class="divider">
@@ -618,30 +833,25 @@
     <div class="sobre-grid">
       <div class="sobre-text">
         <p class="section-eyebrow">Sobre el torneo</p>
-        <h2 class="section-title">Compite.<br>Disfruta.<br>Gana.</h2>
+        <h2 class="section-title">Tu sitio está<br>en la pista.</h2>
         <p>
-          El <strong>ASICS Pádel Open</strong> es un torneo por parejas organizado
-          en colaboración con ASICS, diseñado para jugadores de todos los niveles
-          que quieran vivir el pádel de forma competitiva y en un ambiente festivo.
+          Un torneo abierto a todas las personas, pensado para disfrutar del pádel
+          y vivir la experiencia completa desde dentro.
         </p>
         <p>
-          Partidos en formato eliminatorio, categorías diferenciadas y
-          una organización cuidada al detalle para que solo tengas que
-          preocuparte de <strong>dar lo mejor en pista</strong>.
+          <strong>Garantizados al menos dos partidos en pista.</strong>
         </p>
         <p>
-          Todos los participantes recibirán un welcome pack oficial de ASICS
-          y los mejores se llevarán premios exclusivos de la marca.
+          Cada participante recibirá un <strong>welcome pack</strong> y podrá disfrutar de activaciones de marca, además de participar en un sorteo.
         </p>
         <div class="stats-row">
-          <div class="stat-item"><div class="stat-number">XX</div><div class="stat-label">Parejas máx.</div></div>
-          <div class="stat-item"><div class="stat-number">X</div><div class="stat-label">Días de torneo</div></div>
-          <div class="stat-item"><div class="stat-number">5</div><div class="stat-label">Categorías</div></div>
+          <div class="stat-item"><div class="stat-number">100</div><div class="stat-label">Parejas máx.</div></div>
+          <div class="stat-item"><div class="stat-number">3</div><div class="stat-label">Días de torneo</div></div>
+          <div class="stat-item"><div class="stat-number">4</div><div class="stat-label">Ciudades</div></div>
         </div>
       </div>
       <div class="sobre-visual">
-        📸
-        <div class="sobre-visual-label">Foto del torneo / club</div>
+        <img src="images/sobre-torneo.jpg" alt="Sobre el torneo ASICS Pádel Open">
       </div>
     </div>
   </div>
@@ -653,14 +863,30 @@
 <section id="categorias">
   <div class="container">
     <p class="section-eyebrow">Categorías</p>
-    <h2 class="section-title">¿En qué nivel<br>participas?</h2>
-    <div class="cats-grid">
-      <div class="cat-card"><div class="cat-num">01</div><div class="cat-name">1ª Masculino</div><div class="cat-desc">Nivel avanzado y competición</div></div>
-      <div class="cat-card"><div class="cat-num">02</div><div class="cat-name">2ª Masculino</div><div class="cat-desc">Nivel medio-alto</div></div>
-      <div class="cat-card"><div class="cat-num">03</div><div class="cat-name">3ª Masculino</div><div class="cat-desc">Iniciación y recreativo</div></div>
-      <div class="cat-card"><div class="cat-num">04</div><div class="cat-name">Femenino</div><div class="cat-desc">Todos los niveles</div></div>
-      <div class="cat-card"><div class="cat-num">05</div><div class="cat-name">Mixto</div><div class="cat-desc">Pareja mixta</div></div>
+    <h2 class="section-title">Nos ajustamos<br>a tu nivel</h2>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:2rem; margin-top:2.5rem;">
+
+      <div>
+        <div style="font-family:'Barlow Condensed',sans-serif; font-size:1rem; font-weight:700; text-transform:uppercase; color:#000066; letter-spacing:2px; margin-bottom:1rem; padding-bottom:.5rem; border-bottom:2px solid #000066;">Masculino</div>
+        <div class="cat-card" style="margin-bottom:1rem; background:#f0f2f8;"><div class="cat-name">1ª Masculina</div><div class="cat-desc">Nivel alto</div></div>
+        <div class="cat-card" style="margin-bottom:1rem; background:#e6e9f5;"><div class="cat-name">2ª Masculina</div><div class="cat-desc">Nivel intermedio/alto</div></div>
+        <div class="cat-card" style="background:#dde1f2;"><div class="cat-name">3ª Masculina</div><div class="cat-desc">Nivel intermedio/bajo</div></div>
+      </div>
+
+      <div>
+        <div style="font-family:'Barlow Condensed',sans-serif; font-size:1rem; font-weight:700; text-transform:uppercase; color:#001a8c; letter-spacing:2px; margin-bottom:1rem; padding-bottom:.5rem; border-bottom:2px solid #001a8c;">Femenino</div>
+        <div class="cat-card" style="margin-bottom:1rem; background:#e3e7f7;"><div class="cat-name">2ª Femenina</div><div class="cat-desc">Nivel intermedio/bajo</div></div>
+        <div class="cat-card" style="background:#d9def4;"><div class="cat-name">3ª Femenina</div><div class="cat-desc">Nivel bajo/iniciación</div></div>
+      </div>
+
+      <div>
+        <div style="font-family:'Barlow Condensed',sans-serif; font-size:1rem; font-weight:700; text-transform:uppercase; color:#0033b3; letter-spacing:2px; margin-bottom:1rem; padding-bottom:.5rem; border-bottom:2px solid #0033b3;">Mixto</div>
+        <div class="cat-card" style="margin-bottom:1rem; background:#eaecf6;"><div class="cat-name">2ª Mixta</div><div class="cat-desc">Nivel intermedio/alto</div></div>
+        <div class="cat-card" style="background:#dfe2f3;"><div class="cat-name">3ª Mixta</div><div class="cat-desc">Nivel intermedio/bajo</div></div>
+      </div>
+
     </div>
+    <p style="text-align:center; margin-top:1.5rem; font-size:0.8rem; color:var(--gris-medio);">La organización podrá ampliar o reducir las categorías según el volumen de participantes en cada prueba.</p>
   </div>
 </section>
 
@@ -675,85 +901,64 @@
       <div class="formato-block">
         <h3>Formato</h3>
         <ul class="formato-list">
-          <li>Fase de grupos: todos contra todos</li>
-          <li>Rondas eliminatorias por bracket</li>
-          <li>Sets a 6 juegos, tie-break en 6-6</li>
-          <li>Super tie-break en el 3er set (10 puntos)</li>
-          <li>Sin tiempo límite en semifinales y final</li>
-          <li>Árbitros designados por la organización</li>
+          <li>Partidos a 2 sets</li>
+          <li>En caso de empate a un set, super tie-break a 10 puntos (ventaja de 2)</li>
+          <li>Punto de oro en todos los juegos</li>
+          <li>Cuadro principal y cuadro de consolación</li>
+          <li>Mínimo 2 partidos garantizados por pareja</li>
         </ul>
       </div>
       <div class="formato-block">
-        <h3>Reglamento</h3>
+        <h3>Horarios</h3>
         <ul class="formato-list">
-          <li>Reglamento oficial FEP</li>
-          <li>Inscripción por parejas</li>
-          <li>Cambio de pareja permitido hasta 48h antes</li>
-          <li>Horarios publicados con 48h de antelación</li>
-          <li>Pistas cubiertas disponibles en caso de lluvia</li>
-          <li>La organización se reserva el derecho de admisión por categoría</li>
+          <li><strong>Viernes:</strong> 18:00h – 22:30h</li>
+          <li><strong>Sábado:</strong> 09:00h – 20:00h</li>
+          <li><strong>Domingo:</strong> Semifinales, finales y entrega de premios · 09:00h – 19:00h</li>
+        </ul>
+        <h3 style="margin-top:1.5rem;">Reglamento</h3>
+        <ul class="formato-list">
+          <li>Torneo destinado a jugador@s amateurs — no se requiere licencia federativa</li>
+          <li>No podrán participar los 150 primeros masculinos ni las 80 primeras femeninas del ranking de cada federación (Catalana, Madrileña, Andaluza y Valenciana)</li>
+          <li>No se permite cambio de pareja en el cuadro principal; sí en el cuadro de consolación</li>
+          <li>Las cancelaciones deben comunicarse con al menos 48h de antelación para tener derecho a devolución</li>
+          <li>Los horarios se publicarán por email una vez cerradas las inscripciones</li>
+          <li>La organización podrá adaptar las categorías según el volumen de participantes</li>
         </ul>
       </div>
     </div>
+    <div style="text-align:center; margin-top:2.5rem;">
+      <a href="docs/normativa-asics-padel-tour-2026.pdf" target="_blank" class="btn-ghost" style="display:inline-flex; align-items:center; gap:.5rem;">
+        ↓ Descargar normativa completa en PDF
+      </a>
+    </div>
   </div>
 </section>
-
-<hr class="divider">
-
-<!-- INSCRIPCIONES -->
 <section id="inscripciones">
   <div class="container">
     <p class="section-eyebrow">Inscripciones</p>
-    <h2 class="section-title">Reserva tu plaza</h2>
+    <h2 class="section-title">Asegura tu plaza</h2>
     <div class="inscr-layout">
       <div class="precio-bloque">
-        <div class="precio-tag">XX€</div>
+        <div class="precio-tag">20€</div>
         <div class="precio-sub">Por pareja · IVA incluido</div>
-        <div class="deadline-pill">⏱ Fecha límite: DD de Mes 2025</div>
+        <div class="deadline-pill">⏱ Fecha límite: pendiente de confirmar</div>
         <div class="incluye-title">La inscripción incluye</div>
         <ul class="incluye-list">
-          <li>Welcome pack oficial ASICS</li>
-          <li>Bolas para todos los partidos</li>
-          <li>Premios para los tres primeros clasificados</li>
-          <li>Reportaje fotográfico del torneo</li>
-          <li>Acceso a vestuarios y zona de descanso</li>
-          <li>Seguro de accidentes durante el torneo</li>
-          <li>Sorteos y actividades entre partidos</li>
+          <li>Welcome pack: camiseta ASICS oficial del torneo, botellín Estrella Damm, overgrip StarVie, productos Mars y alguna sorpresa más</li>
+          <li>Mínimo 2 partidos garantizados en pista</li>
+          <li>Degustación de productos Estrella Damm</li>
+          <li>Acceso a activaciones de marca</li>
+          <li>Sorteo para los participantes</li>
+          <li>Premios para campeones y subcampeones</li>
+          <li>Descuento 20% en producto ASICS en El Corte Inglés*</li>
         </ul>
-        <div class="pago-title">Métodos de pago</div>
-        <div class="pago-pills">
-          <span class="pago-pill">Bizum</span>
-          <span class="pago-pill">Transferencia</span>
-          <span class="pago-pill">Pago online</span>
-        </div>
+        <p style="font-size:0.7rem; color:var(--gris-medio); margin-top:.5rem;">*Pendiente de confirmación</p>
       </div>
-      <div class="form-card">
-        <h3>Formulario de inscripción</h3>
-        <div class="form-row">
-          <div class="form-group"><label>Nombre — Jugador 1</label><input type="text" placeholder="Nombre completo"></div>
-          <div class="form-group"><label>Nombre — Jugador 2</label><input type="text" placeholder="Nombre de tu pareja"></div>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label>Email</label><input type="email" placeholder="correo@ejemplo.com"></div>
-          <div class="form-group"><label>Teléfono</label><input type="tel" placeholder="+34 600 000 000"></div>
-        </div>
-        <div class="form-row">
-          <div class="form-group full">
-            <label>Categoría</label>
-            <select>
-              <option value="">Selecciona tu categoría</option>
-              <option>1ª Masculino</option>
-              <option>2ª Masculino</option>
-              <option>3ª Masculino</option>
-              <option>Femenino</option>
-              <option>Mixto</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group full"><label>Comentarios (opcional)</label><textarea rows="2" placeholder="¿Alguna pregunta o comentario?"></textarea></div>
-        </div>
-        <button class="btn-submit">Enviar inscripción</button>
+      <div class="form-card" style="display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.5rem; text-align:center;">
+        <img src="images/brand/logo-torneo.png" alt="ASICS Padel Tour 2026" style="height:80px; width:auto; max-width:200px; object-fit:contain;">
+        <h3 style="font-family:'Barlow Condensed',sans-serif; font-size:1.8rem; font-weight:900; text-transform:uppercase; color:var(--negro);">Inscríbete a través de Xporty</h3>
+        <p style="color:var(--gris-medio); font-size:0.95rem; line-height:1.7; max-width:340px;">Las inscripciones se gestionan a través de la plataforma oficial Xporty. Haz clic en el botón para reservar tu plaza.</p>
+        <a href="#" class="btn-submit" style="display:inline-block; text-decoration:none; text-align:center; opacity:0.6; cursor:default;" onclick="return false;">Inscripción próximamente</a>
         <p class="form-legal">Al inscribirte aceptas los <a href="#">términos y condiciones</a> del torneo y la <a href="#">política de privacidad</a> de ASICS.</p>
       </div>
     </div>
@@ -766,34 +971,32 @@
 <section id="premios">
   <div class="container">
     <p class="section-eyebrow">Premios</p>
-    <h2 class="section-title">Compite por<br>el top</h2>
+    <h2 class="section-title">Algo más<br>que un título</h2>
     <div class="premios-grid">
       <div class="premio-card gold">
         <div class="premio-rank">01</div>
         <div class="premio-title">Campeones</div>
+        <img src="images/premios/premios-campeones-hombre.jpg" alt="Equipación textil ASICS hombre" style="width:100%; height:160px; object-fit:cover; margin:1rem 0;">
+        <img src="images/premios/premios-campeones-mujer.jpg" alt="Equipación textil ASICS mujer" style="width:100%; height:160px; object-fit:cover; margin-bottom:1rem;">
         <ul class="premio-items">
-          <li>Trofeos individuales</li>
-          <li>Welcome pack premium ASICS</li>
-          <li>Producto exclusivo de la nueva colección</li>
-          <li>Reportaje fotográfico</li>
+          <li>Equipación textil completa ASICS</li>
         </ul>
       </div>
       <div class="premio-card silver">
         <div class="premio-rank">02</div>
         <div class="premio-title">Subcampeones</div>
+        <img src="images/premios/premios-mochila.jpg" alt="Mochila ASICS" style="width:100%; height:160px; object-fit:cover; margin:1rem 0;">
         <ul class="premio-items">
-          <li>Trofeos individuales</li>
-          <li>Welcome pack ASICS</li>
-          <li>Descuento exclusivo en tienda</li>
+          <li>Mochila ASICS</li>
         </ul>
       </div>
       <div class="premio-card bronze">
         <div class="premio-rank">03</div>
-        <div class="premio-title">Tercer puesto</div>
+        <div class="premio-title">Campeones consolación</div>
+        <img src="images/premios/premios-consolacion-gorra.jpg" alt="Gorra ASICS" style="width:100%; height:160px; object-fit:cover; margin:1rem 0;">
         <ul class="premio-items">
-          <li>Trofeos individuales</li>
-          <li>Premio sorpresa ASICS</li>
-          <li>Reconocimiento oficial</li>
+          <li>Gorra ASICS</li>
+          <li>Muñequera ASICS</li>
         </ul>
       </div>
     </div>
@@ -802,7 +1005,18 @@
 
 <hr class="divider">
 
-<!-- GALERÍA -->
+<!-- CUADROS -->
+<section id="cuadros">
+  <div class="container">
+    <p class="section-eyebrow">Clasificación</p>
+    <h2 class="section-title">Clasificación</h2>
+    <p style="color:var(--gris-medio); font-size:0.95rem; margin-bottom:2rem; font-weight:300;">Los cuadros y clasificaciones estarán disponibles una vez abiertas las inscripciones.</p>
+    <div style="width:100%; border-radius:4px; border:1px solid var(--borde); padding:4rem 2rem; text-align:center; background:var(--gris-claro);">
+      <p style="font-family:'Barlow Condensed',sans-serif; font-size:1.5rem; font-weight:700; color:var(--azul); letter-spacing:2px; text-transform:uppercase; margin:0;">Próximamente</p>
+      <p style="color:var(--gris-medio); font-size:0.9rem; margin-top:.5rem; font-weight:300;">Los cuadros estarán disponibles cuando comience el torneo.</p>
+    </div>
+  </div>
+</section>
 <section id="galeria">
   <div class="container">
     <div class="galeria-intro">
@@ -810,14 +1024,29 @@
         <p class="section-eyebrow">Galería</p>
         <h2 class="section-title">Vive el ambiente</h2>
       </div>
-      <p style="color:var(--gris-medio); font-size:.85rem; max-width:320px; text-align:right; font-weight:300; line-height:1.6;">Fotos del club y ediciones anteriores. Se sustituirán por imágenes reales del torneo.</p>
+      
     </div>
     <div class="galeria-grid">
-      <div class="galeria-item span2 span-row">🏟️<div class="galeria-overlay">Ver foto</div><div class="galeria-label">El club</div></div>
-      <div class="galeria-item">🎾<div class="galeria-overlay">Ver foto</div></div>
-      <div class="galeria-item">👟<div class="galeria-overlay">Ver foto</div></div>
-      <div class="galeria-item">🏅<div class="galeria-overlay">Ver foto</div></div>
-      <div class="galeria-item">📸<div class="galeria-overlay">Ver foto</div></div>
+      <div class="galeria-item span2 span-row">
+        <img src="images/galeria/galeria-01.jpg" alt="Pistas del torneo ASICS">
+        
+      </div>
+      <div class="galeria-item">
+        <img src="images/galeria/galeria-02.jpg" alt="Jugador en pista">
+        
+      </div>
+      <div class="galeria-item">
+        <img src="images/galeria/galeria-03.jpg" alt="Jugadora en pista">
+        
+      </div>
+      <div class="galeria-item">
+        <img src="images/galeria/galeria-04.jpg" alt="Jugadora en sprint">
+        
+      </div>
+      <div class="galeria-item">
+        <img src="images/galeria/galeria-05.jpg" alt="Jugador de espaldas">
+        
+      </div>
     </div>
   </div>
 </section>
@@ -831,14 +1060,14 @@
     <h2 class="section-title">Cómo llegar</h2>
     <div class="ubic-grid">
       <div class="ubic-info">
-        <h3>Nombre del Club</h3>
+        <h3>Padel Tibidabo — Barcelona</h3>
         <div class="ubic-row">
           <div class="ubic-icon-box">📍</div>
-          <div><div class="ubic-row-title">Dirección</div><div class="ubic-row-val"><strong>Calle del Club, XX · Ciudad</strong><br>Código Postal</div></div>
+          <div><div class="ubic-row-title">Dirección</div><div class="ubic-row-val"><strong>Carrer de Roman Macaya, 11</strong><br>Sarrià-Sant Gervasi, 08022 Barcelona</div></div>
         </div>
         <div class="ubic-row">
-          <div class="ubic-icon-box">🚗</div>
-          <div><div class="ubic-row-title">Parking</div><div class="ubic-row-val">Aparcamiento gratuito para participantes. Acceso por la puerta principal del club.</div></div>
+          <div class="ubic-icon-box">📅</div>
+          <div><div class="ubic-row-title">Fechas</div><div class="ubic-row-val"><strong>15, 16 y 17 de Mayo 2026</strong><br>Inscripciones abiertas el 6 de Abril</div></div>
         </div>
         <div class="ubic-row">
           <div class="ubic-icon-box">🚿</div>
@@ -846,13 +1075,11 @@
         </div>
         <div class="ubic-row">
           <div class="ubic-icon-box">🚇</div>
-          <div><div class="ubic-row-title">Transporte público</div><div class="ubic-row-val">Metro línea X, parada [Nombre]. Autobús: líneas XX.</div></div>
+          <div><div class="ubic-row-title">Transporte público</div><div class="ubic-row-val">FGC: L7, parada Pàdua. Bus: líneas 14, 58, 64.</div></div>
         </div>
       </div>
-      <div class="map-box">
-        <div class="map-box-icon">🗺️</div>
-        <div class="map-box-text">Mapa Google Maps integrado</div>
-        <p style="font-size:.75rem; color:var(--gris-medio); margin-top:.5rem;">Se integrará con la dirección real del club</p>
+      <div class="map-box" style="padding:0; overflow:hidden;">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2992.1745805798414!2d2.132941277243784!3d41.413728794359045!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12a4980529583e8b%3A0xe4772ff04c448d38!2sCarrer%20de%20Roman%20Macaya%2C%2011%2C%20Sarri%C3%A0-Sant%20Gervasi%2C%2008022%20Barcelona!5e0!3m2!1sen!2ses!4v1772662856123!5m2!1sen!2ses" width="100%" height="380" style="border:0; display:block;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
     </div>
   </div>
@@ -873,28 +1100,28 @@
       </div>
       <div class="faq-list">
         <div class="faq-item">
-          <div class="faq-q" onclick="toggleFaq(this)">¿Puedo cambiar de pareja? <span class="faq-arrow">+</span></div>
-          <div class="faq-a">Sí. Los cambios de pareja están permitidos hasta 48 horas antes del inicio del torneo. Escríbenos por email indicando los nombres de ambos jugadores y la nueva composición.</div>
+          <div class="faq-q">¿Puedo cambiar de pareja? <span class="faq-arrow">+</span></div>
+          <div class="faq-a">En el cuadro principal no está permitido el cambio de pareja. En el cuadro de consolación sí se permite. Cualquier cambio debe comunicarse a la organización.</div>
         </div>
         <div class="faq-item">
-          <div class="faq-q" onclick="toggleFaq(this)">¿Qué ocurre si me lesiono? <span class="faq-arrow">+</span></div>
-          <div class="faq-a">En caso de lesión antes del inicio del torneo, se reembolsará el importe de la inscripción con justificante médico. Durante el torneo, la pareja puede ser sustituida previa comunicación a la organización.</div>
+          <div class="faq-q">¿Puedo cancelar la inscripción? <span class="faq-arrow">+</span></div>
+          <div class="faq-a">Sí, siempre que avises con al menos 48 horas de antelación. Si no se avisa con ese tiempo, se pierde el derecho a devolución.</div>
         </div>
         <div class="faq-item">
-          <div class="faq-q" onclick="toggleFaq(this)">¿Puedo cancelar la inscripción? <span class="faq-arrow">+</span></div>
-          <div class="faq-a">Las cancelaciones con más de 10 días de antelación tienen derecho a reembolso completo. Con menos de 10 días, se reembolsará el 50%. Pasada la fecha límite de inscripción, no habrá reembolso.</div>
+          <div class="faq-q">¿Cuándo se publican los horarios? <span class="faq-arrow">+</span></div>
+          <div class="faq-a">Una vez cerradas las inscripciones, recibirás un email con el enlace donde podrás ver los cuadros y horarios. La organización tendrá en cuenta las preferencias horarias indicadas en la inscripción, aunque no puede garantizarlas en su totalidad.</div>
         </div>
         <div class="faq-item">
-          <div class="faq-q" onclick="toggleFaq(this)">¿Cuándo se publican los horarios? <span class="faq-arrow">+</span></div>
-          <div class="faq-a">Los horarios de la fase de grupos se publicarán 48 horas antes del inicio del torneo. Los de las rondas eliminatorias se publicarán el mismo día una vez conocidos los resultados.</div>
+          <div class="faq-q">¿Qué nivel necesito para participar? <span class="faq-arrow">+</span></div>
+          <div class="faq-a">El torneo está abierto a jugador@s amateurs de todos los niveles. No es necesario tener licencia federativa. No podrán participar los 150 primeros masculinos ni las 80 primeras femeninas del ranking de cada federación autonómica (Catalana, Madrileña, Andaluza y Valenciana).</div>
         </div>
         <div class="faq-item">
-          <div class="faq-q" onclick="toggleFaq(this)">¿Qué nivel necesito para participar? <span class="faq-arrow">+</span></div>
-          <div class="faq-a">El torneo tiene categorías para todos los niveles, desde iniciación hasta competición avanzada. Si tienes dudas sobre en qué categoría inscribirte, contáctanos y te ayudamos a encontrar la más adecuada.</div>
+          <div class="faq-q">¿Qué incluye el welcome pack? <span class="faq-arrow">+</span></div>
+          <div class="faq-a">El welcome pack incluye: camiseta ASICS oficial del torneo, botellín Estrella Damm, overgrip StarVie, productos Mars y alguna sorpresa más. Se entrega el primer día del torneo.</div>
         </div>
         <div class="faq-item">
-          <div class="faq-q" onclick="toggleFaq(this)">¿Qué incluye el welcome pack? <span class="faq-arrow">+</span></div>
-          <div class="faq-a">El welcome pack incluye bolsa deportiva oficial del torneo, productos de ASICS y acceso a todas las actividades del evento. Los campeones recibirán un pack premium con producto exclusivo de la marca.</div>
+          <div class="faq-q">¿Cuántos partidos jugaré? <span class="faq-arrow">+</span></div>
+          <div class="faq-a">Todos los participantes tienen garantizados al menos 2 partidos. Dependiendo de los resultados, podrás continuar en el cuadro principal o pasar al cuadro de consolación.</div>
         </div>
       </div>
     </div>
@@ -915,11 +1142,11 @@
       <div class="contact-block">
         <div class="contact-item">
           <span class="contact-icon">📧</span>
-          <div><div class="contact-label">Email</div><div class="contact-val"><a href="/cdn-cgi/l/email-protection#41312025242d0120322822326f222e2c"><span class="__cf_email__" data-cfemail="23534247464f6342504a40500d404c4e">[email&#160;protected]</span></a></div></div>
+          <div><div class="contact-label">Racket Motion Sports</div><div class="contact-val"><a id="contact-email" href="#">xavi [at] racketmotionsports.com</a></div></div>
         </div>
         <div class="contact-item">
           <span class="contact-icon">📱</span>
-          <div><div class="contact-label">Teléfono / WhatsApp</div><div class="contact-val">+34 600 000 000</div></div>
+          <div><div class="contact-label">Teléfono / WhatsApp</div><div class="contact-val">Pendiente de confirmar</div></div>
         </div>
         <div class="contact-item">
           <span class="contact-icon">🌐</span>
@@ -932,45 +1159,86 @@
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-brand">ASICS · Pádel Open 2025</div>
-  <p>© 2025 ASICS Europe B.V. · <a href="#">Política de privacidad</a> · <a href="#">Términos y condiciones</a></p>
+  <div class="footer-brand">ASICS · Padel Tour 2026</div>
+  <p>© 2026 ASICS Europe B.V. · <a href="#">Política de privacidad</a> · <a href="#">Términos y condiciones</a></p>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  // Actualiza esta fecha cuando se confirme
-  const DEADLINE = new Date('2025-06-01T23:59:59').getTime();
+<script>
+  // COUNTDOWN INTELIGENTE — apunta siempre al próximo evento relevante
+  var eventos = [
+    { label: 'Inscripciones Barcelona abren en:',  fecha: new Date('2026-04-13T00:00:00') },
+    { label: 'Inscripciones Barcelona cierran en:', fecha: new Date('2026-04-10T23:59:00') },
+    { label: 'Inscripciones Marbella abren en:',   fecha: new Date('2026-05-18T00:00:00') },
+    { label: 'Inscripciones Marbella cierran en:', fecha: new Date('2026-06-22T23:59:00') },
+    { label: 'Inscripciones Valencia abren en:',   fecha: new Date('2026-08-29T00:00:00') },
+    { label: 'Inscripciones Valencia cierran en:', fecha: new Date('2026-09-14T23:59:00') },
+    { label: 'Inscripciones Madrid abren en:',     fecha: new Date('2026-09-14T00:00:00') },
+    { label: 'Inscripciones Madrid cierran en:',   fecha: new Date('2026-10-19T23:59:00') },
+  ];
+
+  function getNextEvento() {
+    var now = Date.now();
+    for (var i = 0; i < eventos.length; i++) {
+      if (eventos[i].fecha.getTime() > now) return eventos[i];
+    }
+    return null;
+  }
 
   function updateTimer() {
-    const diff = DEADLINE - Date.now();
-    if (diff <= 0) {
-      document.querySelector('.countdown-bar').innerHTML =
-        '<p style="color:rgba(255,255,255,.8);letter-spacing:2px;text-transform:uppercase;font-size:.9rem;font-weight:600;">Inscripciones cerradas</p>';
+    var evento = getNextEvento();
+    var label = document.getElementById('countdown-label');
+    var units = document.getElementById('countdown-units');
+    if (!evento) {
+      if (label) label.textContent = 'Torneo finalizado · ¡Hasta 2027!';
+      if (units) units.style.display = 'none';
       return;
     }
-    const d = Math.floor(diff / 86400000);
-    const h = Math.floor((diff % 86400000) / 3600000);
-    const m = Math.floor((diff % 3600000) / 60000);
-    const s = Math.floor((diff % 60000) / 1000);
-    document.getElementById('c-dias').textContent  = String(d).padStart(2,'0');
-    document.getElementById('c-horas').textContent = String(h).padStart(2,'0');
-    document.getElementById('c-min').textContent   = String(m).padStart(2,'0');
-    document.getElementById('c-seg').textContent   = String(s).padStart(2,'0');
+    var diff = evento.fecha.getTime() - Date.now();
+    if (label) label.textContent = evento.label;
+    var d = Math.floor(diff / 86400000);
+    var hh = Math.floor((diff % 86400000) / 3600000);
+    var mm = Math.floor((diff % 3600000) / 60000);
+    var ss = Math.floor((diff % 60000) / 1000);
+    var ed = document.getElementById('c-dias');
+    var eh = document.getElementById('c-horas');
+    var em = document.getElementById('c-min');
+    var es = document.getElementById('c-seg');
+    if (ed) ed.textContent = String(d).padStart(2,'0');
+    if (eh) eh.textContent = String(hh).padStart(2,'0');
+    if (em) em.textContent = String(mm).padStart(2,'0');
+    if (es) es.textContent = String(ss).padStart(2,'0');
   }
   updateTimer();
   setInterval(updateTimer, 1000);
 
-  // FAQ
-  function toggleFaq(el) {
-    el.parentElement.classList.toggle('open');
-  }
+  // EMAIL CONTACTO
+  var emailUser = 'xavi', emailDomain = 'racketmotionsports.com';
+  var el = document.getElementById('contact-email');
+  if (el) { el.href = 'mailto:' + emailUser + '@' + emailDomain; el.textContent = emailUser + '@' + emailDomain; }
 
-  // Scroll reveal
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.style.opacity = '1';
-        e.target.style.transform = 'translateY(0)';
-      }
+  // HAMBURGER MENU
+  var hamburger = document.getElementById('nav-hamburger');
+  var mobileMenu = document.getElementById('nav-mobile-menu');
+  if (hamburger && mobileMenu) {
+    hamburger.addEventListener('click', function() {
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
     });
-  }, { threshold: 0.08 });
-  document.querySelectorAll('.cat-card, .stat-item, .premio-card, .fa
+    mobileMenu.querySelectorAll('a').forEach(function(a) {
+      a.addEventListener('click', function() {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+      });
+    });
+  }
+  document.querySelectorAll('.faq-q').forEach(function(q) {
+    q.style.cursor = 'pointer';
+    q.addEventListener('click', function() {
+      var item = this.parentElement;
+      var isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(function(i) { i.classList.remove('open'); });
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+</script></body>
+</html>
