@@ -1296,7 +1296,7 @@
     for (var i = 1; i <= totalFotos; i++) {
       var img = document.createElement('img');
       var num = i < 10 ? '0' + i : '' + i;
-      img.src = 'images/galeria-barcelona/barcelona (' + i + ').jpg';
+      img.src = 'images/galeria-barcelona/barcelona-' + num + '.jpg';
       img.alt = 'Foto torneo Barcelona ' + i;
       img.loading = 'lazy';
       img.onclick = (function(idx){ return function(){ abrirLightbox(idx); }; })(i - 1);
@@ -1321,7 +1321,8 @@
   function abrirLightbox(idx) {
     lightboxIdx = idx;
     var num = idx + 1;
-    document.getElementById('lightbox-img').src = 'images/galeria-barcelona/barcelona (' + num + ').jpg';
+    var numStr = num < 10 ? '0' + num : '' + num;
+    document.getElementById('lightbox-img').src = 'images/galeria-barcelona/barcelona-' + numStr + '.jpg';
     document.getElementById('lightbox').classList.add('open');
     document.body.style.overflow = 'hidden';
   }
