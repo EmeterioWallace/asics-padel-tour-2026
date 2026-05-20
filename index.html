@@ -198,6 +198,39 @@
 
   /* ── SOBRE EL EVENTO ── */
   #sobre { background: var(--blanco); }
+  /* CARRUSEL FOTOS TORNEO */
+  .carrusel-wrapper {
+    position: relative; display: flex; align-items: center; gap: 1rem;
+  }
+  .carrusel-track-outer { overflow: hidden; flex: 1; border-radius: 4px; }
+  .carrusel-track { display: flex; transition: transform 0.4s ease; }
+  .carrusel-track img {
+    min-width: calc(33.333% - 0.67rem); width: calc(33.333% - 0.67rem);
+    height: 260px; object-fit: cover; margin-right: 1rem;
+    border-radius: 4px; cursor: pointer; flex-shrink: 0;
+  }
+  .carrusel-btn {
+    background: var(--azul); color: #fff; border: none;
+    width: 44px; height: 44px; border-radius: 50%;
+    font-size: 1.5rem; cursor: pointer; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .2s;
+  }
+  .carrusel-btn:hover { background: var(--azul-dark); }
+  .carrusel-counter { text-align:center; margin-top:1rem; font-size:0.85rem; color:var(--gris-medio); font-weight:300; }
+  .lightbox {
+    display: none; position: fixed; top:0; left:0; right:0; bottom:0;
+    background: rgba(0,0,0,.92); z-index: 99999;
+    align-items: center; justify-content: center;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; border-radius: 4px; }
+  .lightbox-close { position:absolute; top:1.5rem; right:1.5rem; color:#fff; font-size:2rem; cursor:pointer; background:none; border:none; }
+  .lightbox-nav { position:absolute; top:50%; transform:translateY(-50%); color:#fff; font-size:3rem; cursor:pointer; background:none; border:none; padding:0 1rem; }
+  .lightbox-nav.prev { left:0; } .lightbox-nav.next { right:0; }
+  @media(max-width:900px){ .carrusel-track img { min-width:calc(50% - 0.5rem); width:calc(50% - 0.5rem); height:180px; } }
+  @media(max-width:480px){ .carrusel-track img { min-width:100%; width:100%; } }
+
   .sobre-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
   .sobre-text p {
     font-size: 1rem; line-height: 1.8; color: var(--gris-oscuro);
@@ -718,6 +751,7 @@
       <li><a href="#premios">Premios</a></li>
       <li><a href="#cuadros">Clasificación</a></li>
       <li><a href="#galeria">Galería</a></li>
+      <li><a href="#fotos-torneo">Fotos</a></li>
       <li><a href="#ubicacion">Ubicación</a></li>
       <li><a href="docs/normativa-asics-padel-tour-2026.pdf" target="_blank">Normativa</a></li>
       <li><a href="#faq">FAQ</a></li>
@@ -1051,7 +1085,27 @@
         <img src="images/galeria/galeria-05.jpg" alt="Jugador de espaldas">
         
       </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- FOTOS DEL TORNEO -->
+<section id="fotos-torneo">
+  <div class="container">
+    <p class="section-eyebrow">Fotos del torneo</p>
+    <h2 class="section-title">I Prueba ASICS Padel Tour — Barcelona</h2>
+    <p style="color:var(--gris-medio); font-size:0.95rem; margin-bottom:2rem; font-weight:300;">Revive los mejores momentos del torneo de Barcelona.</p>
+
+    <div class="carrusel-wrapper">
+      <button class="carrusel-btn carrusel-prev" onclick="moverCarrusel(-1)">&#8249;</button>
+      <div class="carrusel-track-outer">
+        <div class="carrusel-track" id="carrusel-track">
+        </div>
+      </div>
+      <button class="carrusel-btn carrusel-next" onclick="moverCarrusel(1)">&#8250;</button>
     </div>
+    <div class="carrusel-counter" id="carrusel-counter">1 / 91</div>
   </div>
 </section>
 
@@ -1167,6 +1221,14 @@
   <p>© 2026 ASICS Europe B.V. · <a href="politica-privacidad.html">Política de privacidad</a> · <a href="#">Términos y condiciones</a></p>
 </footer>
 
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="cerrarLightbox(event)">
+  <button class="lightbox-close" onclick="cerrarLightbox()">✕</button>
+  <button class="lightbox-nav prev" onclick="lightboxNav(-1, event)">&#8249;</button>
+  <img id="lightbox-img" src="" alt="">
+  <button class="lightbox-nav next" onclick="lightboxNav(1, event)">&#8250;</button>
+</div>
+
 <!-- BANNER COOKIES -->
 <div id="cookie-banner" style="display:none; position:fixed; bottom:0; left:0; right:0; background:var(--azul); color:#fff; padding:1rem 2rem; z-index:99999; display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; box-shadow:0 -2px 10px rgba(0,0,0,.2);">
   <p style="margin:0; font-size:0.85rem; font-weight:300; line-height:1.6; max-width:700px;">Este sitio web utiliza cookies propias y de terceros para mejorar tu experiencia y analizar el tráfico. Al hacer clic en "Aceptar", consientes el uso de todas las cookies. Puedes consultar nuestra <a href="politica-privacidad.html" style="color:rgba(255,255,255,.8); text-decoration:underline;">política de privacidad</a>.</p>
@@ -1221,6 +1283,70 @@
     if (em) em.textContent = String(mm).padStart(2,'0');
     if (es) es.textContent = String(ss).padStart(2,'0');
   }
+  // CARRUSEL FOTOS BARCELONA
+  var totalFotos = 91;
+  var fotoActual = 0;
+  var visibles = window.innerWidth <= 480 ? 1 : window.innerWidth <= 900 ? 2 : 3;
+  var carruselPos = 0;
+
+  function construirCarrusel() {
+    var track = document.getElementById('carrusel-track');
+    if (!track) return;
+    track.innerHTML = '';
+    for (var i = 1; i <= totalFotos; i++) {
+      var img = document.createElement('img');
+      var num = i < 10 ? '0' + i : '' + i;
+      img.src = 'images/galeria-barcelona/barcelona (' + i + ').jpg';
+      img.alt = 'Foto torneo Barcelona ' + i;
+      img.loading = 'lazy';
+      img.onclick = (function(idx){ return function(){ abrirLightbox(idx); }; })(i - 1);
+      track.appendChild(img);
+    }
+  }
+
+  function moverCarrusel(dir) {
+    visibles = window.innerWidth <= 480 ? 1 : window.innerWidth <= 900 ? 2 : 3;
+    carruselPos += dir;
+    if (carruselPos < 0) carruselPos = 0;
+    if (carruselPos > totalFotos - visibles) carruselPos = totalFotos - visibles;
+    var track = document.getElementById('carrusel-track');
+    var itemWidth = track.children[0] ? track.children[0].offsetWidth + 16 : 0;
+    track.style.transform = 'translateX(-' + (carruselPos * itemWidth) + 'px)';
+    var counter = document.getElementById('carrusel-counter');
+    if (counter) counter.textContent = (carruselPos + 1) + ' / ' + totalFotos;
+  }
+
+  // LIGHTBOX
+  var lightboxIdx = 0;
+  function abrirLightbox(idx) {
+    lightboxIdx = idx;
+    var num = idx + 1;
+    document.getElementById('lightbox-img').src = 'images/galeria-barcelona/barcelona (' + num + ').jpg';
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function cerrarLightbox(e) {
+    if (e && e.target !== document.getElementById('lightbox') && !e.target.classList.contains('lightbox-close')) return;
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function lightboxNav(dir, e) {
+    if (e) e.stopPropagation();
+    lightboxIdx += dir;
+    if (lightboxIdx < 0) lightboxIdx = totalFotos - 1;
+    if (lightboxIdx >= totalFotos) lightboxIdx = 0;
+    abrirLightbox(lightboxIdx);
+  }
+  document.addEventListener('keydown', function(e) {
+    var lb = document.getElementById('lightbox');
+    if (!lb || !lb.classList.contains('open')) return;
+    if (e.key === 'ArrowRight') lightboxNav(1, null);
+    if (e.key === 'ArrowLeft') lightboxNav(-1, null);
+    if (e.key === 'Escape') { lb.classList.remove('open'); document.body.style.overflow = ''; }
+  });
+
+  construirCarrusel();
+
   updateTimer();
   setInterval(updateTimer, 1000);
 
