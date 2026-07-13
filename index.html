@@ -751,7 +751,8 @@
       <li><a href="#premios">Premios</a></li>
       <li><a href="#cuadros">Clasificación</a></li>
       <li><a href="#galeria">Galería</a></li>
-      <li><a href="#fotos-torneo">Fotos</a></li>
+      <li><a href="#fotos-torneo">Fotos BCN</a></li>
+      <li><a href="#fotos-marbella">Fotos MRB</a></li>
       <li><a href="#ubicacion">Ubicación</a></li>
       <li><a href="docs/normativa-asics-padel-tour-2026.pdf" target="_blank">Normativa</a></li>
       <li><a href="#faq">FAQ</a></li>
@@ -1111,6 +1112,25 @@
 
 <hr class="divider">
 
+<!-- FOTOS MARBELLA -->
+<section id="fotos-marbella">
+  <div class="container">
+    <p class="section-eyebrow">Fotos del torneo</p>
+    <h2 class="section-title">II Prueba ASICS Padel Tour — Marbella</h2>
+    <p style="color:var(--gris-medio); font-size:0.95rem; margin-bottom:2rem; font-weight:300;">Revive los mejores momentos del torneo de Marbella.</p>
+    <div class="carrusel-wrapper">
+      <button class="carrusel-btn carrusel-prev" onclick="moverCarruselMarbella(-1)">&#8249;</button>
+      <div class="carrusel-track-outer">
+        <div class="carrusel-track" id="carrusel-track-marbella"></div>
+      </div>
+      <button class="carrusel-btn carrusel-next" onclick="moverCarruselMarbella(1)">&#8250;</button>
+    </div>
+    <div class="carrusel-counter" id="carrusel-counter-marbella">1 / 29</div>
+  </div>
+</section>
+
+<hr class="divider">
+
 <!-- UBICACIÓN -->
 <section id="ubicacion">
   <div class="container">
@@ -1245,7 +1265,7 @@
     { label: 'Inscripciones Barcelona cierran en:', fecha: new Date('2026-04-10T23:59:00') },
     { label: 'Inscripciones Marbella abren en:',   fecha: new Date('2026-05-18T00:00:00') },
     { label: 'Inscripciones Marbella cierran en:', fecha: new Date('2026-06-22T23:59:00') },
-    { label: 'Inscripciones Valencia abren en:',   fecha: new Date('2026-08-29T00:00:00') },
+    { label: 'Inscripciones Valencia abren en:',   fecha: new Date('2026-07-20T00:00:00') },
     { label: 'Inscripciones Valencia cierran en:', fecha: new Date('2026-09-14T23:59:00') },
     { label: 'Inscripciones Madrid abren en:',     fecha: new Date('2026-09-14T00:00:00') },
     { label: 'Inscripciones Madrid cierran en:',   fecha: new Date('2026-10-19T23:59:00') },
@@ -1318,11 +1338,16 @@
 
   // LIGHTBOX
   var lightboxIdx = 0;
-  function abrirLightbox(idx) {
+  var lightboxTorneo = 'barcelona';
+  function abrirLightbox(idx, torneo) {
     lightboxIdx = idx;
+    lightboxTorneo = torneo || 'barcelona';
     var num = idx + 1;
     var numStr = num < 10 ? '0' + num : '' + num;
-    document.getElementById('lightbox-img').src = 'images/galeria-barcelona/barcelona-' + numStr + '.jpg';
+    var src = lightboxTorneo === 'marbella'
+      ? 'images/galeria-marbella/marbella-' + numStr + '.jpg'
+      : 'images/galeria-barcelona/barcelona-' + numStr + '.jpg';
+    document.getElementById('lightbox-img').src = src;
     document.getElementById('lightbox').classList.add('open');
     document.body.style.overflow = 'hidden';
   }
@@ -1333,10 +1358,11 @@
   }
   function lightboxNav(dir, e) {
     if (e) e.stopPropagation();
+    var total = lightboxTorneo === 'marbella' ? totalFotosMarbella : totalFotos;
     lightboxIdx += dir;
-    if (lightboxIdx < 0) lightboxIdx = totalFotos - 1;
-    if (lightboxIdx >= totalFotos) lightboxIdx = 0;
-    abrirLightbox(lightboxIdx);
+    if (lightboxIdx < 0) lightboxIdx = total - 1;
+    if (lightboxIdx >= total) lightboxIdx = 0;
+    abrirLightbox(lightboxIdx, lightboxTorneo);
   }
   document.addEventListener('keydown', function(e) {
     var lb = document.getElementById('lightbox');
@@ -1347,6 +1373,39 @@
   });
 
   construirCarrusel();
+
+  // CARRUSEL FOTOS MARBELLA
+  var totalFotosMarbella = 29;
+  var carruselPosMarbella = 0;
+
+  function construirCarruselMarbella() {
+    var track = document.getElementById('carrusel-track-marbella');
+    if (!track) return;
+    track.innerHTML = '';
+    for (var i = 1; i <= totalFotosMarbella; i++) {
+      var img = document.createElement('img');
+      var num = i < 10 ? '0' + i : '' + i;
+      img.src = 'images/galeria-marbella/marbella-' + num + '.jpg';
+      img.alt = 'Foto torneo Marbella ' + i;
+      img.loading = 'lazy';
+      img.onclick = (function(idx){ return function(){ abrirLightbox(idx, 'marbella'); }; })(i - 1);
+      track.appendChild(img);
+    }
+  }
+
+  function moverCarruselMarbella(dir) {
+    var vis = window.innerWidth <= 480 ? 1 : window.innerWidth <= 900 ? 2 : 3;
+    carruselPosMarbella += dir;
+    if (carruselPosMarbella < 0) carruselPosMarbella = 0;
+    if (carruselPosMarbella > totalFotosMarbella - vis) carruselPosMarbella = totalFotosMarbella - vis;
+    var track = document.getElementById('carrusel-track-marbella');
+    var itemWidth = track.children[0] ? track.children[0].offsetWidth + 16 : 0;
+    track.style.transform = 'translateX(-' + (carruselPosMarbella * itemWidth) + 'px)';
+    var counter = document.getElementById('carrusel-counter-marbella');
+    if (counter) counter.textContent = (carruselPosMarbella + 1) + ' / ' + totalFotosMarbella;
+  }
+
+  construirCarruselMarbella();
 
   updateTimer();
   setInterval(updateTimer, 1000);
