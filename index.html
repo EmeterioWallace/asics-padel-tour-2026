@@ -753,6 +753,7 @@
       <li><a href="#galeria">Galería</a></li>
       <li><a href="#fotos-torneo">Fotos BCN</a></li>
       <li><a href="#fotos-marbella">Fotos MRB</a></li>
+      <li><a href="#fotos-valencia">Fotos VLC</a></li>
       <li><a href="#ubicacion">Ubicación</a></li>
       <li><a href="docs/normativa-asics-padel-tour-2026.pdf" target="_blank">Normativa</a></li>
       <li><a href="#faq">FAQ</a></li>
@@ -1131,6 +1132,25 @@
 
 <hr class="divider">
 
+<!-- FOTOS VALENCIA -->
+<section id="fotos-valencia">
+  <div class="container">
+    <p class="section-eyebrow">Fotos del torneo</p>
+    <h2 class="section-title">III Prueba ASICS Padel Tour — Valencia</h2>
+    <p style="color:var(--gris-medio); font-size:0.95rem; margin-bottom:2rem; font-weight:300;">Revive los mejores momentos del torneo de Valencia.</p>
+    <div class="carrusel-wrapper">
+      <button class="carrusel-btn carrusel-prev" onclick="moverCarruselValencia(-1)">&#8249;</button>
+      <div class="carrusel-track-outer">
+        <div class="carrusel-track" id="carrusel-track-valencia"></div>
+      </div>
+      <button class="carrusel-btn carrusel-next" onclick="moverCarruselValencia(1)">&#8250;</button>
+    </div>
+    <div class="carrusel-counter" id="carrusel-counter-valencia">1 / 86</div>
+  </div>
+</section>
+
+<hr class="divider">
+
 <!-- UBICACIÓN -->
 <section id="ubicacion">
   <div class="container">
@@ -1342,6 +1362,8 @@
     var numStr = num < 10 ? '0' + num : '' + num;
     var src = lightboxTorneo === 'marbella'
       ? 'images/galeria-marbella/marbella-' + numStr + '.jpg'
+      : lightboxTorneo === 'valencia'
+      ? 'images/galeria-valencia/valencia-' + numStr + '.jpg'
       : 'images/galeria-barcelona/barcelona-' + numStr + '.jpg';
     document.getElementById('lightbox-img').src = src;
     document.getElementById('lightbox').classList.add('open');
@@ -1354,7 +1376,7 @@
   }
   function lightboxNav(dir, e) {
     if (e) e.stopPropagation();
-    var total = lightboxTorneo === 'marbella' ? totalFotosMarbella : totalFotos;
+    var total = lightboxTorneo === 'marbella' ? totalFotosMarbella : lightboxTorneo === 'valencia' ? totalFotosValencia : totalFotos;
     lightboxIdx += dir;
     if (lightboxIdx < 0) lightboxIdx = total - 1;
     if (lightboxIdx >= total) lightboxIdx = 0;
@@ -1400,6 +1422,39 @@
     var counter = document.getElementById('carrusel-counter-marbella');
     if (counter) counter.textContent = (carruselPosMarbella + 1) + ' / ' + totalFotosMarbella;
   }
+
+  // CARRUSEL FOTOS VALENCIA
+  var totalFotosValencia = 86;
+  var carruselPosValencia = 0;
+
+  function construirCarruselValencia() {
+    var track = document.getElementById('carrusel-track-valencia');
+    if (!track) return;
+    track.innerHTML = '';
+    for (var i = 1; i <= totalFotosValencia; i++) {
+      var img = document.createElement('img');
+      var num = i < 10 ? '0' + i : '' + i;
+      img.src = 'images/galeria-valencia/valencia-' + num + '.jpg';
+      img.alt = 'Foto torneo Valencia ' + i;
+      img.loading = 'lazy';
+      img.onclick = (function(idx){ return function(){ abrirLightbox(idx, 'valencia'); }; })(i - 1);
+      track.appendChild(img);
+    }
+  }
+
+  function moverCarruselValencia(dir) {
+    var vis = window.innerWidth <= 480 ? 1 : window.innerWidth <= 900 ? 2 : 3;
+    carruselPosValencia += dir;
+    if (carruselPosValencia < 0) carruselPosValencia = 0;
+    if (carruselPosValencia > totalFotosValencia - vis) carruselPosValencia = totalFotosValencia - vis;
+    var track = document.getElementById('carrusel-track-valencia');
+    var itemWidth = track.children[0] ? track.children[0].offsetWidth + 16 : 0;
+    track.style.transform = 'translateX(-' + (carruselPosValencia * itemWidth) + 'px)';
+    var counter = document.getElementById('carrusel-counter-valencia');
+    if (counter) counter.textContent = (carruselPosValencia + 1) + ' / ' + totalFotosValencia;
+  }
+
+  construirCarruselValencia();
 
   construirCarruselMarbella();
 
